@@ -10,7 +10,8 @@ import {
   X,
   ChevronRight,
   LogOut,
-  Building2
+  Building2,
+  ClipboardList
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
