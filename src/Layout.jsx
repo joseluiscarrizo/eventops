@@ -20,6 +20,7 @@ const navItems = [
   { label: "Eventos", page: "Events", icon: Calendar },
   { label: "Staff", page: "Staff", icon: Users },
   { label: "Clientes", page: "Clients", icon: Building2 },
+  { label: "Pedidos", page: "Orders", icon: ClipboardList },
   { label: "Check-in QR", page: "CheckIn", icon: QrCode },
 ];
 
