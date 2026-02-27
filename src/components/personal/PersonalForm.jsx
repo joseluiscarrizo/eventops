@@ -71,6 +71,15 @@ export default function PersonalForm({ person, onSave, onClose }) {
     }));
   };
 
+  const toggleExtraProfile = (p) => {
+    setForm(f => ({
+      ...f,
+      extra_profiles: f.extra_profiles?.includes(p)
+        ? f.extra_profiles.filter(x => x !== p)
+        : [...(f.extra_profiles || []), p],
+    }));
+  };
+
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   const handleSubmit = async (e) => {
