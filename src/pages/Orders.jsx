@@ -178,6 +178,13 @@ export default function Orders() {
           onClose={() => setShowForm(false)}
         />
       )}
+
+      {selectedOrder && (
+        <OrderStaffManager
+          order={selectedOrder}
+          onClose={() => { setSelectedOrder(null); load(); }}
+        />
+      )}
     </div>
   );
 }
