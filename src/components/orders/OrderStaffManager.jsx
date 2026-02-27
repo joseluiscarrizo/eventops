@@ -55,10 +55,20 @@ export default function OrderStaffManager({ order, onClose }) {
   useEffect(() => { load(); }, [load]);
 
   const isPersonUnavailable = (p) => {
-    if (!p.unavailable_until) return false;
-    const orderDate = order.event_date ? new Date(order.event_date) : new Date();
-    return isAfter(parseISO(p.unavailable_until), orderDate) || 
-           p.unavailable_until >= (order.event_date || "");
+    const orderDate = order.event_date || new Date().toISOString().slice(0, 10);
+    // Check legacy unavailable_until field
+    if (p.unavailable_until && p.unavailable_until >= orderDate) return { reason: p.unavailable_reason || "No disponible" };
+    // Check Absence records
+    const absence = absences.find(a =>
+      a.personal_id === p.id &&
+      a.date_start <= orderDate &&
+      a.date_end >= orderDate
+    );
+    if (absence) {
+      const types = { vacaciones: "Vacaciones", baja_medica: "Baja médica", permiso: "Permiso", otros: "Ausente" };
+      return { reason: absence.reason || types[absence.type] || "Ausente", until: absence.date_end };
+    }
+    return null;
   };
 
   const addAssignment = async (person, roleOverride) => {
