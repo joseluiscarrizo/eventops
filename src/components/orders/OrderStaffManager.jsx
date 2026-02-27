@@ -37,14 +37,18 @@ export default function OrderStaffManager({ order, onClose }) {
   const [filterAvailability, setFilterAvailability] = useState("available"); // "all" | "available"
   const [searchPersonal, setSearchPersonal] = useState("");
 
+  const [absences, setAbsences] = useState([]);
+
   const load = useCallback(async () => {
     setLoading(true);
-    const [assigns, pers] = await Promise.all([
+    const [assigns, pers, abs] = await Promise.all([
       base44.entities.OrderAssignment.filter({ order_id: order.id }),
       base44.entities.Personal.list("-created_date", 300),
+      base44.entities.Absence.filter({ status: "approved" }),
     ]);
     setAssignments(assigns);
     setPersonal(pers.filter(p => p.status === "active"));
+    setAbsences(abs);
     setLoading(false);
   }, [order.id]);
 
