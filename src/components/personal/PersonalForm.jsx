@@ -112,7 +112,8 @@ export default function PersonalForm({ person, onSave, onClose }) {
             <div className="px-5 pt-4">
               <TabsList className="w-full">
                 <TabsTrigger value="general" className="flex-1">General</TabsTrigger>
-                <TabsTrigger value="skills" className="flex-1">Habilidades y Certificaciones</TabsTrigger>
+                <TabsTrigger value="skills" className="flex-1">Habilidades</TabsTrigger>
+                {person && <TabsTrigger value="absences" className="flex-1">Ausencias</TabsTrigger>}
               </TabsList>
             </div>
 
