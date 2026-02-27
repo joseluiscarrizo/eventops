@@ -119,7 +119,7 @@ export default function OrderStaffManager({ order, onClose }) {
     const matchProfile = filterProfile === "all" || allProfiles.includes(filterProfile);
     const matchSearch = `${p.first_name} ${p.last_name}`.toLowerCase().includes(searchPersonal.toLowerCase());
     const matchSpecialty = filterSpecialty === "all" || (p.specialties || []).includes(filterSpecialty);
-    const matchAvailability = filterAvailability === "all" || !isPersonUnavailable(p);
+    const matchAvailability = filterAvailability === "all" || !isPersonUnavailable(p) === false ? filterAvailability === "all" || !isPersonUnavailable(p) : true;
     return matchProfile && matchSearch && matchSpecialty && matchAvailability;
   });
 
