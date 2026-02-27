@@ -152,15 +152,26 @@ export default function Personal() {
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-semibold text-gray-900">{person.first_name} {person.last_name}</span>
                       <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${cfg?.color || "bg-gray-100 text-gray-600"}`}>{cfg?.label}</span>
+                      {person.extra_profiles?.map(ep => (
+                        <span key={ep} className={`text-xs font-medium px-2 py-0.5 rounded-full ${PROFILE_CONFIG[ep]?.color || "bg-gray-100 text-gray-600"}`}>
+                          +{PROFILE_CONFIG[ep]?.label || ep}
+                        </span>
+                      ))}
                       <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${STATUS_COLORS[person.status] || STATUS_COLORS.active}`}>
                         {person.status === "active" ? "Activo" : "Inactivo"}
                       </span>
+                      {isUnavailable(person) && (
+                        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 flex items-center gap-1">
+                          <AlertTriangle className="w-3 h-3" />No disponible hasta {person.unavailable_until}
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center gap-3 mt-0.5 text-xs text-gray-400 flex-wrap">
                       <span className="font-mono">{person.code}</span>
                       {person.phone && <span>{person.phone}</span>}
                       {person.email && <span>{person.email}</span>}
                       {person.experience_years && <span>{person.experience_years} años exp.</span>}
+                      {person.unavailable_reason && isUnavailable(person) && <span className="text-amber-600">{person.unavailable_reason}</span>}
                     </div>
                     {person.specialties?.length > 0 && (
                       <div className="flex gap-1 mt-1 flex-wrap">
