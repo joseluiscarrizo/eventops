@@ -55,6 +55,7 @@ import Informes from './pages/Informes';
 import Orders from './pages/Orders';
 import Personal from './pages/Personal';
 import Staff from './pages/Staff';
+import CalendarSync from './pages/CalendarSync';
 import __Layout from './Layout.jsx';
 
 
@@ -67,6 +68,7 @@ export const PAGES = {
     "Orders": Orders,
     "Personal": Personal,
     "Staff": Staff,
+    "CalendarSync": CalendarSync,
 }
 
 export const pagesConfig = {
