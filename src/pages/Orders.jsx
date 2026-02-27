@@ -7,6 +7,8 @@ import { Plus, Search, Pencil, Trash2, MapPin, Clock, Shirt } from "lucide-react
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import OrderForm from "@/components/orders/OrderForm";
+import OrderCalendar from "@/components/orders/OrderCalendar";
+import OrderStaffManager from "@/components/orders/OrderStaffManager";
 
 const STATUS_LABELS = {
   pending: { label: "Pendiente", cls: "bg-amber-100 text-amber-700" },
