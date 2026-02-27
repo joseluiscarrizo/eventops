@@ -17,6 +17,7 @@ const PROFILE_CONFIG = {
 export default function PersonalForm({ person, onSave, onClose }) {
   const [form, setForm] = useState({
     profile_type: "camarero",
+    extra_profiles: [],
     code: "",
     first_name: "",
     last_name: "",
@@ -29,6 +30,8 @@ export default function PersonalForm({ person, onSave, onClose }) {
     certifications: "",
     languages: "",
     availability: "",
+    unavailable_until: "",
+    unavailable_reason: "",
     status: "active",
   });
   const [saving, setSaving] = useState(false);
