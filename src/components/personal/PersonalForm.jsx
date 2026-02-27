@@ -257,6 +257,13 @@ export default function PersonalForm({ person, onSave, onClose }) {
               </div>
             </TabsContent>
 
+            {/* ── AUSENCIAS ── */}
+            {person && (
+              <TabsContent value="absences" className="p-5">
+                <AbsenceManager person={person} />
+              </TabsContent>
+            )}
+
             {/* ── HABILIDADES ── */}
             <TabsContent value="skills" className="p-5 space-y-4">
               <div>
