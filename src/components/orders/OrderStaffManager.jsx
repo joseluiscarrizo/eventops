@@ -33,6 +33,8 @@ export default function OrderStaffManager({ order, onClose }) {
   const [personal, setPersonal] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterProfile, setFilterProfile] = useState("all");
+  const [filterSpecialty, setFilterSpecialty] = useState("all");
+  const [filterAvailability, setFilterAvailability] = useState("available"); // "all" | "available"
   const [searchPersonal, setSearchPersonal] = useState("");
 
   const load = useCallback(async () => {
