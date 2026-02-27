@@ -97,10 +97,16 @@ export default function OrderStaffManager({ order, onClose }) {
 
   const assignedIds = new Set(assignments.map(a => a.personal_id));
 
+  // Collect all specialties for filter dropdown
+  const allSpecialties = [...new Set(personal.flatMap(p => p.specialties || []))].sort();
+
   const filteredPersonal = personal.filter(p => {
-    const matchProfile = filterProfile === "all" || p.profile_type === filterProfile;
+    const allProfiles = [p.profile_type, ...(p.extra_profiles || [])];
+    const matchProfile = filterProfile === "all" || allProfiles.includes(filterProfile);
     const matchSearch = `${p.first_name} ${p.last_name}`.toLowerCase().includes(searchPersonal.toLowerCase());
-    return matchProfile && matchSearch;
+    const matchSpecialty = filterSpecialty === "all" || (p.specialties || []).includes(filterSpecialty);
+    const matchAvailability = filterAvailability === "all" || !isPersonUnavailable(p);
+    return matchProfile && matchSearch && matchSpecialty && matchAvailability;
   });
 
   const allConfirmed = assignments.length > 0 && assignments.every(a => a.status === "confirmed");
