@@ -9,7 +9,8 @@ import {
   Menu,
   X,
   ChevronRight,
-  LogOut
+  LogOut,
+  Building2
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
