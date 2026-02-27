@@ -193,6 +193,56 @@ export default function PersonalForm({ person, onSave, onClose }) {
                 </div>
               </div>
 
+              {/* Perfiles adicionales */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-2">Perfiles adicionales <span className="text-gray-400 font-normal">(puede desempeñar múltiples roles)</span></label>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(PROFILE_CONFIG).filter(([k]) => k !== form.profile_type).map(([k, v]) => (
+                    <button
+                      key={k}
+                      type="button"
+                      onClick={() => toggleExtraProfile(k)}
+                      className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
+                        form.extra_profiles?.includes(k)
+                          ? "bg-indigo-600 text-white border-indigo-600"
+                          : "bg-white text-gray-600 border-gray-300 hover:border-indigo-400"
+                      }`}
+                    >
+                      {v.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* No disponible temporalmente */}
+              <div className="border rounded-lg p-3 bg-amber-50 border-amber-200 space-y-3">
+                <label className="text-sm font-semibold text-amber-800 block">⏸ No disponible temporalmente</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs text-amber-700 block mb-1">No disponible hasta</label>
+                    <Input
+                      type="date"
+                      value={form.unavailable_until || ""}
+                      onChange={e => set("unavailable_until", e.target.value)}
+                      className="bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-amber-700 block mb-1">Motivo</label>
+                    <Input
+                      value={form.unavailable_reason || ""}
+                      onChange={e => set("unavailable_reason", e.target.value)}
+                      placeholder="Ej: Vacaciones, Baja médica..."
+                      className="bg-white"
+                    />
+                  </div>
+                </div>
+                {form.unavailable_until && (
+                  <button type="button" onClick={() => { set("unavailable_until", ""); set("unavailable_reason", ""); }}
+                    className="text-xs text-amber-700 underline">Limpiar no disponibilidad</button>
+                )}
+              </div>
+
               {/* Comentarios */}
               <div>
                 <label className="text-sm font-medium text-gray-700 block mb-1">Comentarios</label>
