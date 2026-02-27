@@ -51,6 +51,18 @@ export default function AssignmentPanel({ event, onClose }) {
     setForm({ staff_member_id: "", zone: "", role_in_event: "" });
     setAdding(false);
     load();
+    // Send notification to assigned staff member
+    const staffMember = staff.find(s => s.id === form.staff_member_id);
+    if (staffMember) {
+      base44.functions.invoke('notifyAssignment', {
+        personal_id: form.staff_member_id,
+        event_id: event.id,
+        event_name: event.name,
+        event_date: event.date_start ? new Date(event.date_start).toLocaleDateString("es") : "",
+        event_place: event.location || "",
+      }).catch(() => {});
+      toast.success(`Notificación enviada a ${staffMember.full_name}`);
+    }
   };
 
   const handleStatusChange = async (assignmentId, status) => {
