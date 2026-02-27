@@ -6,7 +6,7 @@ import { Plus, Search, MapPin, Calendar, Users, Pencil, Trash2 } from "lucide-re
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import EventForm from "../components/events/EventForm";
-import AssignmentPanel from "../components/events/AssignmentPanel";
+import AssignmentPanel from "@/components/events/AssignmentPanel";
 
 const STATUS_LABELS = {
   draft: { label: "Borrador", cls: "bg-gray-100 text-gray-600" },
