@@ -163,68 +163,11 @@ export default function Orders() {
 
         {/* ── GESTIÓN DE PEDIDOS ── */}
         <TabsContent value="gestion">
-          <div className="bg-white rounded-xl border overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b">
-                <tr>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">Pedido</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">Cliente</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">Evento</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">Fecha</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">Tipo</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">Estado</th>
-                  <th className="px-4 py-3" />
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {loading ? (
-                  Array(4).fill(0).map((_, i) => (
-                    <tr key={i} className="animate-pulse">
-                      {Array(7).fill(0).map((_, j) => (
-                        <td key={j} className="px-4 py-3"><div className="h-4 bg-gray-100 rounded" /></td>
-                      ))}
-                    </tr>
-                  ))
-                ) : orders.length === 0 ? (
-                  <tr><td colSpan={7} className="text-center py-12 text-gray-400">No hay pedidos</td></tr>
-                ) : orders.map(order => {
-                  const s = STATUS_LABELS[order.status] || STATUS_LABELS.pending;
-                  return (
-                    <tr key={order.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-3 font-mono font-semibold text-indigo-700">{order.order_number}</td>
-                      <td className="px-4 py-3 text-gray-700">{order.client_name || "—"}</td>
-                      <td className="px-4 py-3 text-gray-700">{order.event_place}</td>
-                      <td className="px-4 py-3 text-gray-500">
-                        {order.event_date ? format(new Date(order.event_date), "d MMM yyyy", { locale: es }) : "—"}
-                      </td>
-                      <td className="px-4 py-3 text-gray-500">{EVENT_TYPE_LABELS[order.event_type] || "—"}</td>
-                      <td className="px-4 py-3">
-                        <select
-                          value={order.status}
-                          onChange={e => handleStatusChange(order, e.target.value)}
-                          className={`text-xs font-medium px-2 py-1 rounded-full border-0 cursor-pointer focus:outline-none ${s.cls}`}
-                        >
-                          {Object.entries(STATUS_LABELS).map(([v, { label }]) => (
-                            <option key={v} value={v}>{label}</option>
-                          ))}
-                        </select>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex gap-1 justify-end">
-                          <button onClick={() => { setEditing(order); setShowForm(true); }} className="p-1.5 text-gray-400 hover:text-indigo-600">
-                            <Pencil className="w-3.5 h-3.5" />
-                          </button>
-                          <button onClick={() => handleDelete(order.id)} className="p-1.5 text-gray-400 hover:text-red-500">
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          <OrderCalendar
+            orders={orders}
+            assignments={assignments}
+            onSelectOrder={setSelectedOrder}
+          />
         </TabsContent>
       </Tabs>
 
