@@ -50,14 +50,21 @@ export default function OrderStaffManager({ order, onClose }) {
 
   useEffect(() => { load(); }, [load]);
 
-  const addAssignment = async (person) => {
+  const isPersonUnavailable = (p) => {
+    if (!p.unavailable_until) return false;
+    const orderDate = order.event_date ? new Date(order.event_date) : new Date();
+    return isAfter(parseISO(p.unavailable_until), orderDate) || 
+           p.unavailable_until >= (order.event_date || "");
+  };
+
+  const addAssignment = async (person, roleOverride) => {
     const already = assignments.find(a => a.personal_id === person.id);
     if (already) return;
     const newA = await base44.entities.OrderAssignment.create({
       order_id: order.id,
       personal_id: person.id,
       personal_name: `${person.first_name} ${person.last_name}`,
-      profile_type: person.profile_type,
+      profile_type: roleOverride || person.profile_type,
       status: "pending",
     });
     setAssignments(prev => [...prev, newA]);
