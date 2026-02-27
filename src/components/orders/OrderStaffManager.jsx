@@ -277,7 +277,7 @@ export default function OrderStaffManager({ order, onClose }) {
                   <div ref={provided.innerRef} {...provided.droppableProps} className="flex-1 space-y-1.5 overflow-y-auto max-h-[400px]">
                     {filteredPersonal.map((p, index) => {
                       const isAssigned = assignedIds.has(p.id);
-                      const unavailable = isPersonUnavailable(p);
+                      const unavailable = isPersonUnavailable(p); // null or {reason, until}
                       const allProfiles = [p.profile_type, ...(p.extra_profiles || [])];
                       return (
                         <Draggable key={p.id} draggableId={p.id} index={index} isDragDisabled={isAssigned || unavailable}>
