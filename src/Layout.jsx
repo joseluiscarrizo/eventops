@@ -26,6 +26,7 @@ const navItems = [
   { label: "Pedidos", page: "Orders", icon: ClipboardList },
   { label: "Personal", page: "Personal", icon: UserCog },
   { label: "Informes", page: "Informes", icon: BarChart2 },
+  { label: "Calendario", page: "CalendarSync", icon: Calendar },
   { label: "Check-in QR", page: "CheckIn", icon: QrCode },
 ];
 
