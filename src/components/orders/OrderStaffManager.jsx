@@ -210,7 +210,7 @@ export default function OrderStaffManager({ order, onClose }) {
             </Droppable>
 
             {/* RIGHT: Available personal */}
-            <div className="w-full lg:w-72 p-4 bg-gray-50 flex flex-col gap-3">
+            <div className="w-full lg:w-80 p-4 bg-gray-50 flex flex-col gap-2">
               <h3 className="font-semibold text-gray-800 text-sm">Personal disponible</h3>
 
               {/* Filters */}
@@ -221,51 +221,117 @@ export default function OrderStaffManager({ order, onClose }) {
                 onChange={e => setSearchPersonal(e.target.value)}
                 className="h-8 text-sm border rounded-lg px-3 focus:outline-none focus:ring-1 focus:ring-indigo-300 bg-white"
               />
-              <select
-                value={filterProfile}
-                onChange={e => setFilterProfile(e.target.value)}
-                className="h-8 text-xs border rounded-lg px-2 focus:outline-none bg-white"
-              >
-                <option value="all">Todos los perfiles</option>
-                {Object.entries(PROFILE_LABELS).map(([v, l]) => (
-                  <option key={v} value={v}>{l}</option>
-                ))}
-              </select>
+              <div className="grid grid-cols-2 gap-1.5">
+                <select
+                  value={filterProfile}
+                  onChange={e => setFilterProfile(e.target.value)}
+                  className="h-8 text-xs border rounded-lg px-2 focus:outline-none bg-white"
+                >
+                  <option value="all">Todos los perfiles</option>
+                  {Object.entries(PROFILE_LABELS).map(([v, l]) => (
+                    <option key={v} value={v}>{l}</option>
+                  ))}
+                </select>
+                <select
+                  value={filterSpecialty}
+                  onChange={e => setFilterSpecialty(e.target.value)}
+                  className="h-8 text-xs border rounded-lg px-2 focus:outline-none bg-white"
+                >
+                  <option value="all">Todas las especialidades</option>
+                  {allSpecialties.map(s => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setFilterAvailability(v => v === "available" ? "all" : "available")}
+                  className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                    filterAvailability === "available"
+                      ? "bg-emerald-600 text-white border-emerald-600"
+                      : "bg-white text-gray-500 border-gray-300"
+                  }`}
+                >
+                  Solo disponibles
+                </button>
+                <span className="text-xs text-gray-400">{filteredPersonal.length} personas</span>
+              </div>
 
               {/* Personal list */}
               <Droppable droppableId="available" isDropDisabled={true}>
                 {(provided) => (
-                  <div ref={provided.innerRef} {...provided.droppableProps} className="flex-1 space-y-1.5 overflow-y-auto max-h-[420px]">
+                  <div ref={provided.innerRef} {...provided.droppableProps} className="flex-1 space-y-1.5 overflow-y-auto max-h-[400px]">
                     {filteredPersonal.map((p, index) => {
                       const isAssigned = assignedIds.has(p.id);
+                      const unavailable = isPersonUnavailable(p);
+                      const allProfiles = [p.profile_type, ...(p.extra_profiles || [])];
                       return (
-                        <Draggable key={p.id} draggableId={p.id} index={index} isDragDisabled={isAssigned}>
+                        <Draggable key={p.id} draggableId={p.id} index={index} isDragDisabled={isAssigned || unavailable}>
                           {(provided, snapshot) => (
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-all select-none
+                              className={`px-3 py-2 rounded-lg border text-sm transition-all select-none
                                 ${snapshot.isDragging ? "shadow-lg rotate-1 z-50 bg-white" : ""}
-                                ${isAssigned ? "opacity-40 bg-white cursor-not-allowed" : "bg-white hover:border-indigo-300 cursor-grab active:cursor-grabbing"}`}
+                                ${isAssigned ? "opacity-40 bg-white cursor-not-allowed" :
+                                  unavailable ? "opacity-60 bg-amber-50 border-amber-200 cursor-not-allowed" :
+                                  "bg-white hover:border-indigo-300 cursor-grab active:cursor-grabbing"}`}
                             >
-                              <div className="flex-1 min-w-0">
-                                <div className="font-medium text-gray-800 truncate">{p.first_name} {p.last_name}</div>
-                                <div className={`text-xs px-1.5 py-0.5 rounded-full inline-block border mt-0.5 ${PROFILE_COLORS[p.profile_type] || "bg-gray-100 text-gray-500"}`}>
-                                  {PROFILE_LABELS[p.profile_type] || p.profile_type}
+                              <div className="flex items-start gap-2">
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-medium text-gray-800 truncate">{p.first_name} {p.last_name}</div>
+                                  {/* Profiles (main + extra) */}
+                                  <div className="flex flex-wrap gap-1 mt-0.5">
+                                    {allProfiles.map(pr => (
+                                      <span key={pr} className={`text-xs px-1.5 py-0.5 rounded-full border ${PROFILE_COLORS[pr] || "bg-gray-100 text-gray-500"}`}>
+                                        {PROFILE_LABELS[pr] || pr}
+                                      </span>
+                                    ))}
+                                  </div>
+                                  {/* Specialties */}
+                                  {p.specialties?.length > 0 && (
+                                    <div className="flex flex-wrap gap-1 mt-0.5">
+                                      {p.specialties.slice(0,3).map(s => (
+                                        <span key={s} className="text-xs bg-gray-100 text-gray-500 px-1 rounded">{s}</span>
+                                      ))}
+                                    </div>
+                                  )}
+                                  {/* Unavailable badge */}
+                                  {unavailable && (
+                                    <div className="flex items-center gap-1 mt-0.5 text-xs text-amber-700">
+                                      <AlertTriangle className="w-3 h-3" />
+                                      No disponible hasta {p.unavailable_until}
+                                      {p.unavailable_reason && ` · ${p.unavailable_reason}`}
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="flex flex-col items-end gap-1">
+                                  {isAssigned && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
+                                  {!isAssigned && !unavailable && (
+                                    allProfiles.length > 1 ? (
+                                      <select
+                                        onClick={e => e.stopPropagation()}
+                                        onChange={e => { if (e.target.value) addAssignment(p, e.target.value); e.target.value = ""; }}
+                                        defaultValue=""
+                                        className="text-xs border rounded-md px-1 py-0.5 bg-indigo-50 text-indigo-700 cursor-pointer focus:outline-none"
+                                      >
+                                        <option value="" disabled>+ Agregar</option>
+                                        {allProfiles.map(pr => (
+                                          <option key={pr} value={pr}>Como {PROFILE_LABELS[pr] || pr}</option>
+                                        ))}
+                                      </select>
+                                    ) : (
+                                      <button
+                                        onClick={() => addAssignment(p)}
+                                        className="text-xs bg-indigo-600 text-white px-2 py-0.5 rounded-md hover:bg-indigo-700 transition-colors"
+                                      >
+                                        Agregar
+                                      </button>
+                                    )
+                                  )}
                                 </div>
                               </div>
-                              {!isAssigned && (
-                                <button
-                                  onClick={() => addAssignment(p)}
-                                  className="flex-shrink-0 text-xs bg-indigo-600 text-white px-2 py-1 rounded-md hover:bg-indigo-700 transition-colors"
-                                >
-                                  Agregar
-                                </button>
-                              )}
-                              {isAssigned && (
-                                <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                              )}
                             </div>
                           )}
                         </Draggable>
