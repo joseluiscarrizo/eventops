@@ -315,8 +315,8 @@ export default function OrderStaffManager({ order, onClose }) {
                                   {unavailable && (
                                     <div className="flex items-center gap-1 mt-0.5 text-xs text-amber-700">
                                       <AlertTriangle className="w-3 h-3" />
-                                      No disponible hasta {p.unavailable_until}
-                                      {p.unavailable_reason && ` · ${p.unavailable_reason}`}
+                                      {unavailable.reason}
+                                      {unavailable.until && ` · hasta ${unavailable.until}`}
                                     </div>
                                   )}
                                 </div>
