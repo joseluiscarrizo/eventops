@@ -122,6 +122,14 @@ export default function Clients() {
           onClose={() => setShowForm(false)}
         />
       )}
+
+      {hubspotClient && (
+        <HubSpotPanel
+          client={hubspotClient}
+          onSynced={load}
+          onClose={() => setHubspotClient(null)}
+        />
+      )}
     </div>
   );
 }
