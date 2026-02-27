@@ -12,7 +12,8 @@ import {
   LogOut,
   Building2,
   ClipboardList,
-  UserCog
+  UserCog,
+  BarChart2
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
