@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search, Pencil, Trash2, Phone, Mail, User } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, Phone, Mail, User, CheckCircle2 } from "lucide-react";
 import ClientForm from "@/components/clients/ClientForm";
+import HubSpotPanel from "@/components/clients/HubSpotPanel";
 
 export default function Clients() {
   const [clients, setClients] = useState([]);
