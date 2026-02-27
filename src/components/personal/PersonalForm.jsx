@@ -84,7 +84,7 @@ export default function PersonalForm({ person, onSave, onClose }) {
   };
 
   const cfg = PROFILE_CONFIG[form.profile_type] || PROFILE_CONFIG.camarero;
-  const btnLabel = person ? "Guardar cambios" : `Crear ${cfg.label}`;
+  const btnLabel = person ? "Guardar cambios" : "Crear perfil";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 overflow-y-auto">
