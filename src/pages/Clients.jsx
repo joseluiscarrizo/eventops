@@ -91,13 +91,24 @@ export default function Clients() {
                   )}
                 </div>
               </div>
-              <div className="border-t px-5 py-3 flex items-center justify-end gap-2">
-                <button onClick={() => { setEditing(client); setShowForm(true); }} className="p-2 text-gray-400 hover:text-indigo-600 transition-colors">
-                  <Pencil className="w-4 h-4" />
+              <div className="border-t px-5 py-3 flex items-center justify-between gap-2">
+                <button
+                  onClick={() => setHubspotClient(client)}
+                  className="flex items-center gap-1.5 text-xs text-orange-600 hover:text-orange-700 font-medium px-2 py-1 rounded hover:bg-orange-50 transition-colors"
+                  title="Ver en HubSpot"
+                >
+                  {client.hubspot_company_id
+                    ? <><CheckCircle2 className="w-3.5 h-3.5" /> CRM</>
+                    : <>CRM / Historial</>}
                 </button>
-                <button onClick={() => handleDelete(client.id)} className="p-2 text-gray-400 hover:text-red-500 transition-colors">
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-1">
+                  <button onClick={() => { setEditing(client); setShowForm(true); }} className="p-2 text-gray-400 hover:text-indigo-600 transition-colors">
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => handleDelete(client.id)} className="p-2 text-gray-400 hover:text-red-500 transition-colors">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
