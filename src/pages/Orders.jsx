@@ -27,11 +27,17 @@ export default function Orders() {
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [assignments, setAssignments] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const load = () => {
     setLoading(true);
-    base44.entities.Order.list("-created_date", 200).then(data => {
-      setOrders(data);
+    Promise.all([
+      base44.entities.Order.list("-created_date", 200),
+      base44.entities.OrderAssignment.list("-created_date", 500),
+    ]).then(([ordersData, assignmentsData]) => {
+      setOrders(ordersData);
+      setAssignments(assignmentsData);
       setLoading(false);
     });
   };
