@@ -112,6 +112,9 @@ export default function Layout({ children, currentPageName }) {
             <Menu className="w-5 h-5 text-gray-600" />
           </button>
           <span className="font-semibold text-gray-900">EventOps</span>
+          <div className="ml-auto">
+            <NotificationBell />
+          </div>
         </header>
 
         <main className="flex-1 p-4 lg:p-8">
