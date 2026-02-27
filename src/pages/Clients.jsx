@@ -12,6 +12,7 @@ export default function Clients() {
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [hubspotClient, setHubspotClient] = useState(null);
 
   const load = () => {
     setLoading(true);
