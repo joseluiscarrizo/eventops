@@ -41,10 +41,10 @@ export default function OrderStaffManager({ order, onClose }) {
     setLoading(true);
     const [assigns, pers] = await Promise.all([
       base44.entities.OrderAssignment.filter({ order_id: order.id }),
-      base44.entities.Personal.filter({ status: "active" }),
+      base44.entities.Personal.list("-created_date", 300),
     ]);
     setAssignments(assigns);
-    setPersonal(pers);
+    setPersonal(pers.filter(p => p.status === "active"));
     setLoading(false);
   }, [order.id]);
 
