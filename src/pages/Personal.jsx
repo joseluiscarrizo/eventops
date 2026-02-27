@@ -18,6 +18,11 @@ const STATUS_COLORS = {
   inactive: "bg-gray-100 text-gray-500",
 };
 
+const isUnavailable = (p) => {
+  if (!p.unavailable_until) return false;
+  return p.unavailable_until >= new Date().toISOString().slice(0, 10);
+};
+
 export default function Personal() {
   const [personnel, setPersonnel] = useState([]);
   const [loading, setLoading] = useState(true);
