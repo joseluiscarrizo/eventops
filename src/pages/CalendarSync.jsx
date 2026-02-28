@@ -66,6 +66,36 @@ export default function CalendarSync() {
 
   const syncedCount = appEvents.filter(e => e.gcal_synced).length;
 
+  const syncShiftToGoogle = async (shift, personal_id) => {
+    setSyncing(prev => ({ ...prev, [shift.id]: true }));
+    try {
+      await base44.functions.invoke('syncShiftToGoogle', {
+        shift_id: shift.id,
+        personal_id,
+        action: 'create',
+      });
+      await loadData();
+    } catch (e) {
+      alert("Error al sincronizar turno: " + e.message);
+    }
+    setSyncing(prev => ({ ...prev, [shift.id]: false }));
+  };
+
+  const deleteShiftFromGoogle = async (shift, personal_id) => {
+    setSyncing(prev => ({ ...prev, [shift.id]: true }));
+    try {
+      await base44.functions.invoke('syncShiftToGoogle', {
+        shift_id: shift.id,
+        personal_id,
+        action: 'delete',
+      });
+      await loadData();
+    } catch (e) {
+      alert("Error al eliminar turno: " + e.message);
+    }
+    setSyncing(prev => ({ ...prev, [shift.id]: false }));
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
