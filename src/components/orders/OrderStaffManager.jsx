@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { X, Plus, Trash2, CheckCircle2, Clock, XCircle, AlertTriangle } from "lucide-react";
+import { X, Plus, Trash2, CheckCircle2, Clock, XCircle, AlertTriangle, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format, parseISO, isAfter } from "date-fns";
 import { es } from "date-fns/locale";
