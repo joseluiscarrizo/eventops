@@ -83,8 +83,10 @@ Deno.serve(async (req) => {
                 recipient_email: admin.email,
                 recipient_name: admin.full_name || admin.email,
                 type: 'general',
-                title: `Check-in: ${staffName}`,
-                message: `${staffName} ha confirmado asistencia al evento "${event.name}" a las ${scanTime}.`,
+                title: isCheckIn ? `Check-in: ${staffName}` : `Servicio cerrado: ${staffName}`,
+                message: isCheckIn
+                    ? `${staffName} ha confirmado asistencia al evento "${event.name}" a las ${scanTime}.`
+                    : `${staffName} ha cerrado servicio en el evento "${event.name}" a las ${scanTime}.`,
                 related_id: assignment.event_id,
                 related_type: 'event',
                 read: false,
