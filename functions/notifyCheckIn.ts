@@ -36,8 +36,8 @@ Deno.serve(async (req) => {
         // Message to the staff member (conversation_id = staff_member_id for personal chats)
         const isCheckIn = action === 'checked_in';
         const msgToStaff = isCheckIn
-            ? `✅ *ASISTENCIA CONFIRMADA*\n\n📅 Día: ${eventDate}\n📌 Evento: ${event.name || '—'}\n🕐 Hora de escaneo: ${scanTime}`
-            : `🔒 *SERVICIO CERRADO*\n\n📅 Día: ${eventDate}\n📌 Evento: ${event.name || '—'}\n🕐 Hora de escaneo: ${scanTime}`;
+            ? `✅ ASISTENCIA CONFIRMADA\n\n${eventDate} ; ${event.name || '—'} ; ${scanTime}`
+            : `🔒 SERVICIO CERRADO\n\n${eventDate} ; ${event.name || '—'} ; ${scanTime}`;
 
         // Message to admins / coordinators (general conversation)
         const msgToAdmin = isCheckIn
