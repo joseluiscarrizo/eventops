@@ -3,9 +3,12 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Search, Pencil, Trash2, Users, AlertTriangle } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, Users, AlertTriangle, Calendar, Clock, MapPin } from "lucide-react";
+import { format, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
 import PersonalForm from "@/components/personal/PersonalForm";
 import ApercibidosTab from "@/components/personal/ApercibidosTab";
+import { useAppRole } from "@/components/auth/useAppRole";
 
 const PROFILE_CONFIG = {
   camarero:        { label: "Camarero",        prefix: "CAM", color: "bg-blue-100 text-blue-700" },
