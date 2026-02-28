@@ -29,10 +29,30 @@ const STATUS_LABELS = {
 
 const TABS = [
   { id: "general", label: "General", icon: BarChart },
+  { id: "pedidos", label: "Pedidos", icon: ClipboardList },
   { id: "cliente", label: "Por cliente", icon: Building2 },
   { id: "perfil", label: "Por perfil", icon: UserCog },
   { id: "coordinador", label: "Por coordinador", icon: User },
 ];
+
+const EVENT_TYPE_LABELS = { restauracion: "Restauración", catering: "Catering" };
+
+function exportCSV(rows, filename) {
+  if (!rows.length) return;
+  const headers = Object.keys(rows[0]);
+  const csv = [
+    headers.join(","),
+    ...rows.map(r => headers.map(h => {
+      const v = r[h] == null ? "" : String(r[h]);
+      return v.includes(",") || v.includes('"') ? `"${v.replace(/"/g, '""')}"` : v;
+    }).join(","))
+  ].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
 
 function StatCard({ icon: Icon, label, value, sub, color = "indigo" }) {
   const colors = {
