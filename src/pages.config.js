@@ -60,6 +60,7 @@ import Staff from './pages/Staff';
 import Settings from './pages/Settings';
 import MiHorario from './pages/MiHorario';
 import Chat from './pages/Chat';
+import ClientChatbot from './pages/ClientChatbot';
 import __Layout from './Layout.jsx';
 
 
@@ -77,6 +78,7 @@ export const PAGES = {
     "Settings": Settings,
     "MiHorario": MiHorario,
     "Chat": Chat,
+    "ClientChatbot": ClientChatbot,
 }
 
 export const pagesConfig = {
