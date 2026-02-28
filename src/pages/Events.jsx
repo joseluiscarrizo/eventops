@@ -25,6 +25,9 @@ export default function Events() {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [viewMode, setViewMode] = useState("grid");
+  const { role } = useAppRole();
+  const canEdit = CAN.manageEvents(role);
 
   const load = () => {
     setLoading(true);
