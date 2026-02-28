@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { X } from "lucide-react";
 import AbsenceManager from "./AbsenceManager";
+import AvailabilityCalendar from "./AvailabilityCalendar";
 
 const PROFILE_CONFIG = {
   camarero:       { label: "Camarero",        prefix: "CAM", specialties: ["Coctelería", "Banquetes", "Restaurant", "Buffet", "VIP"] },
