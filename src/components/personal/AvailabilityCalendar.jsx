@@ -79,7 +79,14 @@ export default function AvailabilityCalendar({ value = [], onChange }) {
   };
 
   const handleTypeChange = (type) => {
-    setNewSlot(s => ({ ...s, type, date_end: needsEndDate(type) ? s.date_end : "", time_start: needsTime(type) ? s.time_start : "", time_end: needsTime(type) ? s.time_end : "" }));
+    setNewSlot(s => ({
+      ...s,
+      type,
+      date_end: needsEndDate(type) ? s.date_end : "",
+      time_start: needsTime(type) ? s.time_start : "",
+      time_end: needsTime(type) ? s.time_end : "",
+      weekdays: needsWeekdays(type) ? s.weekdays : []
+    }));
   };
 
   const addSlot = () => {
