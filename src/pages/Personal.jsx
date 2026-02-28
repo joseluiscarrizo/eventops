@@ -311,8 +311,7 @@ export default function Personal() {
           <ApercibidosTab personnel={personnel} onReload={load} />
         </TabsContent>
 
-        {user?.personal_id && (
-          <TabsContent value="mihorario" className="space-y-6 max-w-3xl">
+        <TabsContent value="mihorario" className="space-y-6 max-w-3xl">
             {/* Absence form */}
             {showAbsenceForm && (
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 space-y-3">
