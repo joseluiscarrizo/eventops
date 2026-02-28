@@ -102,8 +102,8 @@ export default function PersonalForm({ person, onSave, onClose }) {
   const btnLabel = person ? "Guardar cambios" : "Crear perfil";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl my-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl my-4 flex flex-col">
         <div className="flex items-center justify-between p-5 border-b">
           <h2 className="text-lg font-semibold">{person ? "Editar personal" : "Nuevo personal"}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
