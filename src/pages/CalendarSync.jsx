@@ -324,11 +324,11 @@ export default function CalendarSync() {
                   </div>
                 ))
               )}
+              </div>
             </div>
-          </div>
 
-          {/* Google Calendar Shifts */}
-          <div className="bg-white rounded-xl border">
+            {/* Google Calendar Shifts */}
+            <div className="bg-white rounded-xl border">
             <div className="p-4 border-b font-semibold text-gray-900 flex items-center gap-2">
               <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg" className="w-4 h-4" alt="" />
               Turnos en Google Calendar
