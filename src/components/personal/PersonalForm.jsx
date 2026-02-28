@@ -120,7 +120,7 @@ export default function PersonalForm({ person, onSave, onClose }) {
             </div>
 
             {/* ── GENERAL ── */}
-            <TabsContent value="general" className="p-5 space-y-4">
+            <TabsContent value="general" className="p-5 space-y-4 overflow-y-auto max-h-[65vh]">
               {/* Perfil / Código / Coordinador */}
               <div className="grid grid-cols-3 gap-3">
                 <div>
