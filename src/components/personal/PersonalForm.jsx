@@ -149,8 +149,19 @@ export default function PersonalForm({ person, onSave, onClose }) {
                   <Input value={generatedCode} readOnly className="bg-gray-50 text-gray-500 font-mono" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-1">Coordinador</label>
-                  <Input value={form.coordinator} onChange={e => set("coordinator", e.target.value)} placeholder="Nombre coordinador..." />
+                   <label className="text-sm font-medium text-gray-700 block mb-1">Coordinador</label>
+                   <Select value={form.coordinator || ""} onValueChange={v => set("coordinator", v)}>
+                     <SelectTrigger>
+                       <SelectValue placeholder="Seleccionar coordinador..." />
+                     </SelectTrigger>
+                     <SelectContent>
+                       {coordinators.map(c => (
+                         <SelectItem key={c.id} value={c.id}>
+                           {c.first_name} {c.last_name}
+                         </SelectItem>
+                       ))}
+                     </SelectContent>
+                   </Select>
                 </div>
               </div>
 
