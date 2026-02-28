@@ -48,39 +48,39 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import CalendarSync from './pages/CalendarSync';
+import Chat from './pages/Chat';
 import CheckIn from './pages/CheckIn';
+import ClientChatbot from './pages/ClientChatbot';
 import Clients from './pages/Clients';
 import Dashboard from './pages/Dashboard';
 import Events from './pages/Events';
 import Informes from './pages/Informes';
+import MiHorario from './pages/MiHorario';
+import Notificaciones from './pages/Notificaciones';
 import Orders from './pages/Orders';
 import Personal from './pages/Personal';
+import Settings from './pages/Settings';
 import Shifts from './pages/Shifts';
 import Staff from './pages/Staff';
-import Settings from './pages/Settings';
-import MiHorario from './pages/MiHorario';
-import Chat from './pages/Chat';
-import ClientChatbot from './pages/ClientChatbot';
-import Notificaciones from './pages/Notificaciones';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "CalendarSync": CalendarSync,
+    "Chat": Chat,
     "CheckIn": CheckIn,
+    "ClientChatbot": ClientChatbot,
     "Clients": Clients,
     "Dashboard": Dashboard,
     "Events": Events,
     "Informes": Informes,
+    "MiHorario": MiHorario,
+    "Notificaciones": Notificaciones,
     "Orders": Orders,
     "Personal": Personal,
+    "Settings": Settings,
     "Shifts": Shifts,
     "Staff": Staff,
-    "Settings": Settings,
-    "MiHorario": MiHorario,
-    "Chat": Chat,
-    "ClientChatbot": ClientChatbot,
-    "Notificaciones": Notificaciones,
 }
 
 export const pagesConfig = {
