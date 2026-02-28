@@ -27,6 +27,11 @@ function needsWeekdays(type) { return ["weekdays", "weekdays_h"].includes(type);
 
 function slotCoversDay(s, dayStr) {
   if (s.type === "day" || s.type === "day_hours") return s.date_start === dayStr;
+  if (s.type === "weekdays" || s.type === "weekdays_h") {
+    const d = new Date(dayStr + "T00:00:00");
+    const dow = (d.getDay() + 6) % 7;
+    return s.weekdays?.includes(dow);
+  }
   if (s.date_start && s.date_end) return dayStr >= s.date_start && dayStr <= s.date_end;
   return false;
 }
