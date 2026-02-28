@@ -104,7 +104,7 @@ export default function Orders() {
 
   const filteredShifts = filterProfile === "all" ? shifts : shifts.filter(s => s.profile_required === filterProfile);
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); loadShifts(); }, []);
 
   const handleDelete = async (id) => {
     if (!confirm("¿Eliminar este pedido?")) return;
