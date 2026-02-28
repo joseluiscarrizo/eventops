@@ -298,6 +298,22 @@ export default function AvailabilityCalendar({ value = [], onChange, settings = 
             </div>
           )}
 
+          {/* Patrón de recurrencia */}
+          {needsRecurringPattern(newSlot.type) && (
+            <RecurringPatternSelector
+              value={newSlot.recurring_pattern}
+              dateStart={newSlot.date_start}
+              onChange={(pattern) => setNewSlot(s => ({ ...s, recurring_pattern: pattern }))}
+            />
+          )}
+
+          {/* Restricciones por slot */}
+          <SlotConstraints
+            buffer={newSlot.buffer_minutes}
+            maxAppointments={newSlot.max_appointments}
+            onChange={({ buffer, maxAppointments }) => setNewSlot(s => ({ ...s, buffer_minutes: buffer, max_appointments: maxAppointments }))}
+          />
+
           {/* Etiqueta */}
           <div>
             <label className="text-xs text-gray-600 mb-1 block">Etiqueta <span className="text-gray-400">(opcional)</span></label>
