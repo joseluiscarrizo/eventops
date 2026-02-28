@@ -144,7 +144,12 @@ export default function AvailabilityCalendar({ value = [], onChange, settings = 
   const nextMonth = () => setCurrentDate(d => new Date(d.getFullYear(), d.getMonth() + 1, 1));
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
+      {/* Global Settings */}
+      {onSettingsChange && (
+        <AvailabilitySettings settings={settings} onChange={onSettingsChange} />
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <button type="button" onClick={prevMonth} className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors">
