@@ -104,7 +104,9 @@ export default function AvailabilityCalendar({ value = [], onChange, settings = 
       date_end: needsEndDate(type) ? s.date_end : "",
       time_start: needsTime(type) ? s.time_start : "",
       time_end: needsTime(type) ? s.time_end : "",
-      weekdays: needsWeekdays(type) ? s.weekdays : []
+      weekdays: needsWeekdays(type) ? s.weekdays : [],
+      recurring_pattern: needsRecurringPattern(type) ? s.recurring_pattern : null,
+      recurring_until: needsRecurringPattern(type) ? s.recurring_until : ""
     }));
   };
 
