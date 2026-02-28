@@ -223,6 +223,14 @@ export default function OrderStaffManager({ order, onClose }) {
                                     <option value="confirmed">Confirmado</option>
                                     <option value="cancelled">Cancelado</option>
                                   </select>
+                                  <button
+                                    onClick={() => syncAssignmentToGoogle(a)}
+                                    disabled={syncingToGoogle[a.id]}
+                                    className="p-1 text-gray-300 hover:text-blue-500 transition-colors disabled:opacity-50"
+                                    title="Sincronizar con Google Calendar"
+                                  >
+                                    <Calendar className="w-3.5 h-3.5" />
+                                  </button>
                                   <button onClick={() => removeAssignment(a.id)} className="p-1 text-gray-300 hover:text-red-500 transition-colors">
                                     <Trash2 className="w-3.5 h-3.5" />
                                   </button>
