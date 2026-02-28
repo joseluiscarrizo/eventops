@@ -32,6 +32,7 @@ export default function PersonalForm({ person, onSave, onClose }) {
     certifications: "",
     languages: "",
     availability: "",
+    availability_schedule: [],
     unavailable_until: "",
     unavailable_reason: "",
     status: "active",
