@@ -76,6 +76,21 @@ export default function ClientForm({ client, onSave, onClose }) {
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
         </div>
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          {/* HubSpot sync strip */}
+          <div className="flex items-center justify-between bg-orange-50 border border-orange-100 rounded-lg px-3 py-2">
+            <span className="text-xs text-orange-700 font-medium">Autocompletar desde HubSpot CRM</span>
+            <button
+              type="button"
+              onClick={syncFromHubSpot}
+              disabled={syncingHub || !form.name}
+              className="flex items-center gap-1.5 text-xs font-medium text-orange-600 hover:text-orange-700 disabled:opacity-40"
+            >
+              {hubSynced
+                ? <><CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Datos importados</>
+                : <><RefreshCw className={`w-3.5 h-3.5 ${syncingHub ? 'animate-spin' : ''}`} />{syncingHub ? 'Buscando...' : 'Sincronizar'}</>
+              }
+            </button>
+          </div>
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">Nombre del Cliente *</label>
             <Input value={form.name} onChange={e => set("name", e.target.value)} required placeholder="Razón social o nombre" />
