@@ -171,6 +171,11 @@ export default function Orders() {
             onSelectOrder={setSelectedOrder}
           />
         </TabsContent>
+
+        {/* ── ALTAS ── */}
+        <TabsContent value="altas">
+          <AltasTab />
+        </TabsContent>
       </Tabs>
 
       {showForm && (
