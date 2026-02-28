@@ -90,10 +90,15 @@ export default function AvailabilityCalendar({ value = [], onChange }) {
   };
 
   const addSlot = () => {
-    if (!newSlot.date_start) return;
+    if (needsWeekdays(newSlot.type)) {
+      if (!newSlot.weekdays?.length) return;
+    } else {
+      if (!newSlot.date_start) return;
+    }
     const slot = { ...newSlot };
     if (!needsEndDate(slot.type)) { slot.date_end = slot.date_start; }
     if (!needsTime(slot.type)) { slot.time_start = ""; slot.time_end = ""; }
+    if (!needsWeekdays(slot.type)) { slot.weekdays = []; }
     onChange([...value, slot]);
     setNewSlot({ ...EMPTY_SLOT });
     setShowForm(false);
