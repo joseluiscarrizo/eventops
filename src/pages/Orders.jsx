@@ -249,6 +249,94 @@ export default function Orders() {
         <TabsContent value="altas">
           <AltasTab />
         </TabsContent>
+
+        {/* ── TURNOS ── */}
+        <TabsContent value="turnos">
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <p className="text-sm text-gray-500">{shifts.length} turno{shifts.length !== 1 ? "s" : ""} registrados</p>
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button variant="outline" size="sm" onClick={exportShiftsCSV} className="gap-1.5">
+                  <Download className="w-4 h-4" /> Exportar CSV
+                </Button>
+                <div className="flex border rounded-lg overflow-hidden">
+                  <button onClick={() => setViewMode("calendar")} className={`px-3 py-1.5 text-sm flex items-center gap-1.5 ${viewMode === "calendar" ? "bg-indigo-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}>
+                    <Calendar className="w-4 h-4" /> Calendario
+                  </button>
+                  <button onClick={() => setViewMode("list")} className={`px-3 py-1.5 text-sm flex items-center gap-1.5 ${viewMode === "list" ? "bg-indigo-600 text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}>
+                    <List className="w-4 h-4" /> Lista
+                  </button>
+                </div>
+                <Button onClick={() => { setEditShift(null); setShowShiftForm(true); }} className="gap-1.5 bg-indigo-600 hover:bg-indigo-700">
+                  <Plus className="w-4 h-4" /> Nuevo turno
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex gap-2 flex-wrap">
+              {[["all", "Todos"], ...Object.entries(SHIFT_PROFILE_LABELS)].map(([v, l]) => (
+                <button key={v} onClick={() => setFilterProfile(v)} className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${filterProfile === v ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"}`}>
+                  {l}
+                </button>
+              ))}
+            </div>
+
+            {viewMode === "calendar" && !shiftsLoading && (
+              <ShiftCalendar shifts={filteredShifts} absences={absences} onShiftClick={(s) => setAssignShift(s)} onDayClick={(date) => { setEditShift({ date }); setShowShiftForm(true); }} />
+            )}
+
+            {viewMode === "list" && (
+              <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+                {shiftsLoading ? (
+                  <div className="p-10 text-center text-gray-400">Cargando...</div>
+                ) : filteredShifts.length === 0 ? (
+                  <div className="p-10 text-center text-gray-400">No hay turnos. Crea el primero.</div>
+                ) : (
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-50 border-b">
+                      <tr>
+                        <th className="text-left px-4 py-3 font-medium text-gray-600">Turno</th>
+                        <th className="text-left px-4 py-3 font-medium text-gray-600">Fecha</th>
+                        <th className="text-left px-4 py-3 font-medium text-gray-600">Horario</th>
+                        <th className="text-left px-4 py-3 font-medium text-gray-600">Perfil</th>
+                        <th className="text-left px-4 py-3 font-medium text-gray-600">Personal</th>
+                        <th className="text-left px-4 py-3 font-medium text-gray-600">Estado</th>
+                        <th className="px-4 py-3"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[...filteredShifts].sort((a, b) => a.date.localeCompare(b.date)).map(s => {
+                        const count = getShiftAssignmentCount(s.id);
+                        const slots = s.slots || 1;
+                        return (
+                          <tr key={s.id} className="border-b hover:bg-gray-50">
+                            <td className="px-4 py-3">
+                              <div className="font-medium text-gray-900">{s.title || "—"}</div>
+                              {s.order_name && <div className="text-xs text-gray-400">{s.order_name}</div>}
+                              {s.location && <div className="text-xs text-gray-400">{s.location}</div>}
+                            </td>
+                            <td className="px-4 py-3 text-gray-700">{s.date}</td>
+                            <td className="px-4 py-3 text-gray-700 whitespace-nowrap">{s.time_start} – {s.time_end}</td>
+                            <td className="px-4 py-3"><span className={`text-xs px-2 py-0.5 rounded-full font-medium ${SHIFT_PROFILE_COLORS[s.profile_required] || "bg-gray-100 text-gray-700"}`}>{SHIFT_PROFILE_LABELS[s.profile_required] || s.profile_required}</span></td>
+                            <td className="px-4 py-3"><span className={`text-xs font-medium ${count >= slots ? "text-green-600" : count > 0 ? "text-amber-600" : "text-gray-400"}`}>{count}/{slots}</span></td>
+                            <td className="px-4 py-3"><span className={`text-xs px-2 py-0.5 rounded-full font-medium ${SHIFT_STATUS_COLORS[s.status]}`}>{SHIFT_STATUS_LABELS[s.status]}</span></td>
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-1">
+                                <button onClick={() => setAssignShift(s)} className="p-1.5 hover:bg-indigo-50 rounded-lg text-indigo-600" title="Asignar personal"><Users className="w-4 h-4" /></button>
+                                <button onClick={() => { setEditShift(s); setShowShiftForm(true); }} className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-500"><Pencil className="w-4 h-4" /></button>
+                                <button onClick={async () => { if (!confirm(`¿Eliminar el turno "${s.title || s.date}"?`)) return; await base44.entities.Shift.delete(s.id); loadShifts(); }} className="p-1.5 hover:bg-red-50 rounded-lg text-red-400"><Trash2 className="w-4 h-4" /></button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            )}
+          </div>
+        </TabsContent>
       </Tabs>
 
       {showForm && (
