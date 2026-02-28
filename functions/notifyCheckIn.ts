@@ -34,10 +34,15 @@ Deno.serve(async (req) => {
         const staffName = staff?.full_name || 'El trabajador';
 
         // Message to the staff member (conversation_id = staff_member_id for personal chats)
-        const msgToStaff = `✅ *ASISTENCIA CONFIRMADA*\n\n📅 Día: ${eventDate}\n📌 Evento: ${event.name || '—'}\n🕐 Hora de escaneo: ${scanTime}`;
+        const isCheckIn = action === 'checked_in';
+        const msgToStaff = isCheckIn
+            ? `✅ *ASISTENCIA CONFIRMADA*\n\n📅 Día: ${eventDate}\n📌 Evento: ${event.name || '—'}\n🕐 Hora de escaneo: ${scanTime}`
+            : `🔒 *SERVICIO CERRADO*\n\n📅 Día: ${eventDate}\n📌 Evento: ${event.name || '—'}\n🕐 Hora de escaneo: ${scanTime}`;
 
         // Message to admins / coordinators (general conversation)
-        const msgToAdmin = `✅ Check-in confirmado\n\n👤 Personal: ${staffName}\n📅 Día: ${eventDate}\n🏢 Evento: ${event.name || '—'}\n📍 Zona/Rol: ${assignment.zone || assignment.role_in_event || '—'}\n🕐 Hora de escaneo: ${scanTime}`;
+        const msgToAdmin = isCheckIn
+            ? `✅ Check-in confirmado\n\n👤 Personal: ${staffName}\n📅 Día: ${eventDate}\n🏢 Evento: ${event.name || '—'}\n📍 Zona/Rol: ${assignment.zone || assignment.role_in_event || '—'}\n🕐 Hora de escaneo: ${scanTime}`
+            : `🔒 Servicio cerrado\n\n👤 Personal: ${staffName}\n📅 Día: ${eventDate}\n🏢 Evento: ${event.name || '—'}\n📍 Zona/Rol: ${assignment.zone || assignment.role_in_event || '—'}\n🕐 Hora de escaneo: ${scanTime}`;
 
         // Send message to staff member chat
         if (staff) {
