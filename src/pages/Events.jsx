@@ -87,7 +87,13 @@ export default function Events() {
       </div>
       )}
 
-      {loading ? (
+      {viewMode === "calendar" ? (
+        <EventCalendar
+          events={events}
+          canEdit={canEdit}
+          onEditEvent={(ev) => { setEditing(ev); setShowForm(true); }}
+        />
+      ) : loading ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array(6).fill(0).map((_, i) => (
             <div key={i} className="bg-white rounded-xl border p-5 animate-pulse space-y-3">
@@ -135,12 +141,16 @@ export default function Events() {
                   <Button size="sm" variant="outline" className="flex-1" onClick={() => setSelectedEvent(event)}>
                     Ver staff
                   </Button>
-                  <button onClick={() => { setEditing(event); setShowForm(true); }} className="p-2 text-gray-400 hover:text-indigo-600 transition-colors">
-                    <Pencil className="w-4 h-4" />
-                  </button>
-                  <button onClick={() => handleDelete(event.id)} className="p-2 text-gray-400 hover:text-red-500 transition-colors">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  {canEdit && (
+                    <>
+                      <button onClick={() => { setEditing(event); setShowForm(true); }} className="p-2 text-gray-400 hover:text-indigo-600 transition-colors">
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button onClick={() => handleDelete(event.id)} className="p-2 text-gray-400 hover:text-red-500 transition-colors">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             );
