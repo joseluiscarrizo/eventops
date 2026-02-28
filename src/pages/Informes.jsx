@@ -92,6 +92,12 @@ export default function Informes() {
   const [selectedProfile, setSelectedProfile] = useState("all");
   const [selectedCoord, setSelectedCoord] = useState("all");
 
+  // Filtros de pedidos
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [orderEventType, setOrderEventType] = useState("all");
+  const [orderStatus, setOrderStatus] = useState("all");
+
   useEffect(() => {
     Promise.all([
       base44.entities.Event.list("-date_start", 500),
