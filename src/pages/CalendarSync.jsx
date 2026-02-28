@@ -277,13 +277,14 @@ export default function CalendarSync() {
                   </a>
                 </div>
               ))
-            )}
+              )}
+            </div>
           </div>
-        </div>
+          </>
         ) : (
-        <>
-          {/* App Shifts */}
-          <div className="bg-white rounded-xl border">
+          <>
+            {/* App Shifts */}
+            <div className="bg-white rounded-xl border">
             <div className="p-4 border-b font-semibold text-gray-900 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-indigo-500" />
               Turnos en EventOps
