@@ -353,6 +353,13 @@ export default function Orders() {
           onClose={() => { setSelectedOrder(null); load(); }}
         />
       )}
+
+      {showShiftForm && (
+        <ShiftForm shift={editShift} onSave={() => { setShowShiftForm(false); setEditShift(null); loadShifts(); }} onClose={() => { setShowShiftForm(false); setEditShift(null); }} />
+      )}
+      {assignShift && (
+        <ShiftStaffAssigner shift={assignShift} onClose={() => { setAssignShift(null); loadShifts(); }} />
+      )}
     </div>
   );
 }
