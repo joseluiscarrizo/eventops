@@ -47,6 +47,7 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import CalendarSync from './pages/CalendarSync';
 import CheckIn from './pages/CheckIn';
 import Clients from './pages/Clients';
 import Dashboard from './pages/Dashboard';
@@ -54,13 +55,14 @@ import Events from './pages/Events';
 import Informes from './pages/Informes';
 import Orders from './pages/Orders';
 import Personal from './pages/Personal';
-import Staff from './pages/Staff';
-import CalendarSync from './pages/CalendarSync';
 import Shifts from './pages/Shifts';
+import Staff from './pages/Staff';
+import Settings from './pages/Settings';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "CalendarSync": CalendarSync,
     "CheckIn": CheckIn,
     "Clients": Clients,
     "Dashboard": Dashboard,
@@ -68,9 +70,9 @@ export const PAGES = {
     "Informes": Informes,
     "Orders": Orders,
     "Personal": Personal,
-    "Staff": Staff,
-    "CalendarSync": CalendarSync,
     "Shifts": Shifts,
+    "Staff": Staff,
+    "Settings": Settings,
 }
 
 export const pagesConfig = {
