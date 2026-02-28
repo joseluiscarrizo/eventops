@@ -95,6 +95,21 @@ export default function OrderStaffManager({ order, onClose }) {
     setAssignments(prev => prev.map(a => a.id === id ? { ...a, status } : a));
   };
 
+  const syncAssignmentToGoogle = async (assignment) => {
+    setSyncingToGoogle(prev => ({ ...prev, [assignment.id]: true }));
+    try {
+      await base44.functions.invoke('syncShiftToGoogle', {
+        shift_id: assignment.id,
+        personal_id: assignment.personal_id,
+        action: 'create',
+      });
+      alert("Turno sincronizado con Google Calendar");
+    } catch (e) {
+      alert("Error al sincronizar: " + e.message);
+    }
+    setSyncingToGoogle(prev => ({ ...prev, [assignment.id]: false }));
+  };
+
   const onDragEnd = async (result) => {
     if (!result.destination || result.destination.droppableId !== "assigned") return;
     const draggedId = result.draggableId;
