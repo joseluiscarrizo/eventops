@@ -340,22 +340,44 @@ export default function AvailabilityCalendar({ value = [], onChange, settings = 
 
       {/* Slots list */}
       {value.length > 0 && (
-        <div className="space-y-1.5">
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Disponibilidades registradas ({value.length})</p>
-          {value.map((s, i) => {
-            const { label, dates, times, cfg } = slotSummary(s);
-            return (
-              <div key={i} className={`flex items-center gap-2 text-xs rounded-lg px-3 py-2 border ${cfg.light} ${cfg.border}`}>
-                <span className="font-semibold">{cfg.icon}</span>
-                <span className="font-medium truncate">{label}</span>
-                {dates && <span className="text-gray-500 truncate">{dates}</span>}
-                {times && <span className="font-medium flex items-center gap-0.5"><Clock className="w-3 h-3" />{times}</span>}
-                <button type="button" onClick={() => removeSlot(i)} className="ml-auto flex-shrink-0 opacity-50 hover:opacity-100 hover:text-red-500 transition-opacity">
-                  <X className="w-3 h-3" />
-                </button>
-              </div>
-            );
-          })}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Disponibilidades registradas ({value.length})</p>
+            <button
+              type="button"
+              onClick={() => setExpandedList(!expandedList)}
+              className="text-xs text-blue-600 hover:underline"
+            >
+              {expandedList ? "Ocultar" : "Ver detalles"}
+            </button>
+          </div>
+          <div className="space-y-1.5">
+            {value.map((s, i) => {
+              const { label, dates, times, cfg } = slotSummary(s);
+              return (
+                <div key={i} className="space-y-1">
+                  <div className={`flex items-center gap-2 text-xs rounded-lg px-3 py-2 border ${cfg.light} ${cfg.border}`}>
+                    <span className="font-semibold">{cfg.icon}</span>
+                    <span className="font-medium truncate">{label}</span>
+                    {dates && <span className="text-gray-500 truncate">{dates}</span>}
+                    {times && <span className="font-medium flex items-center gap-0.5"><Clock className="w-3 h-3" />{times}</span>}
+                    <button type="button" onClick={() => removeSlot(i)} className="ml-auto flex-shrink-0 opacity-50 hover:opacity-100 hover:text-red-500 transition-opacity">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                  {expandedList && (s.buffer_minutes || s.max_appointments || s.recurring_until) && (
+                    <div className="text-xs text-gray-600 px-4 py-1.5 bg-gray-50 rounded-lg border border-gray-200 ml-1">
+                      <div className="space-y-0.5">
+                        {s.buffer_minutes && <div>⏱️ Descanso: {s.buffer_minutes} min</div>}
+                        {s.max_appointments && <div>📊 Máx. citas: {s.max_appointments}</div>}
+                        {s.recurring_until && <div>📅 Válido hasta: {s.recurring_until}</div>}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 
