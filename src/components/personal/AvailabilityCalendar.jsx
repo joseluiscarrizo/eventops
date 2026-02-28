@@ -325,7 +325,11 @@ export default function AvailabilityCalendar({ value = [], onChange, settings = 
             <button
               type="button"
               onClick={addSlot}
-              disabled={needsWeekdays(newSlot.type) ? !newSlot.weekdays?.length : !newSlot.date_start}
+              disabled={
+                needsWeekdays(newSlot.type) ? !newSlot.weekdays?.length :
+                needsRecurringPattern(newSlot.type) ? !newSlot.recurring_pattern :
+                !newSlot.date_start
+              }
               className="text-xs px-4 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
               Añadir
