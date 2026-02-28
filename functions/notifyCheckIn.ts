@@ -60,7 +60,7 @@ Deno.serve(async (req) => {
                 await base44.asServiceRole.integrations.Core.SendEmail({
                     to: staff.email,
                     subject: isCheckIn ? `✅ Asistencia confirmada – ${event.name}` : `🔒 Servicio cerrado – ${event.name}`,
-                    body: msgToStaff.replace(/\*/g, '').replace(/\n/g, '<br>'),
+                    body: msgToStaff.replace(/\n/g, '<br>'),
                 });
             }
         }
