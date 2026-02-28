@@ -12,6 +12,8 @@ const TYPE_CONFIG = {
   range_hours:{ label: "Rango + Horas",     icon: "⏱️", color: "bg-teal-500",    light: "bg-teal-100 text-teal-800",    border: "border-teal-300" },
   week:       { label: "Semana completa",   icon: "🗓️", color: "bg-indigo-500",  light: "bg-indigo-100 text-indigo-800", border: "border-indigo-300" },
   week_hours: { label: "Semana + Horas",    icon: "📋", color: "bg-violet-500",  light: "bg-violet-100 text-violet-800", border: "border-violet-300" },
+  weekdays:   { label: "Días de la semana", icon: "📅", color: "bg-orange-500",  light: "bg-orange-100 text-orange-800", border: "border-orange-300" },
+  weekdays_h: { label: "Días sem. + Horas", icon: "⏰", color: "bg-red-500",     light: "bg-red-100 text-red-800",      border: "border-red-300" },
   month:      { label: "Mes completo",      icon: "📅", color: "bg-purple-500",  light: "bg-purple-100 text-purple-800", border: "border-purple-300" },
 };
 
