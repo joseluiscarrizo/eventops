@@ -22,7 +22,19 @@ const TYPE_CONFIG = {
   recurring_advanced: { label: "Recurrencia avanzada",  icon: "🔁", color: "bg-lime-500",    light: "bg-lime-100 text-lime-800",     border: "border-lime-300" },
 };
 
-const EMPTY_SLOT = { type: "day", date_start: "", date_end: "", time_start: "", time_end: "", label: "", weekdays: [] };
+const EMPTY_SLOT = {
+  type: "day",
+  date_start: "",
+  date_end: "",
+  time_start: "",
+  time_end: "",
+  label: "",
+  weekdays: [],
+  recurring_pattern: null,
+  recurring_until: "",
+  buffer_minutes: null,
+  max_appointments: null
+};
 
 const DAY_NAMES_FULL = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
