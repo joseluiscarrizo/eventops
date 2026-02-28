@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
         if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
         const { assignment_id, action } = await req.json();
-        if (!assignment_id || action !== 'checked_in') {
+        if (!assignment_id || (action !== 'checked_in' && action !== 'checked_out')) {
             return Response.json({ ok: true, skipped: true });
         }
 
