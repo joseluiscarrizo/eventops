@@ -32,6 +32,7 @@ const ALL_NAV = [
   { label: "Personal",     page: "Personal",     icon: UserCog,         permission: "managePersonal" },
   { label: "Turnos",       page: "Shifts",       icon: CalendarClock,   permission: "manageShifts" },
   { label: "Mi horario",   page: "MiHorario",    icon: User,            permission: null },
+  { label: "Chat",         page: "Chat",          icon: MessageSquare,   permission: null },
   { label: "Informes",     page: "Informes",     icon: BarChart2,       permission: "viewReports" },
   { label: "Calendario",   page: "CalendarSync", icon: Calendar,        permission: "manageEvents" },
   { label: "Check-in QR",  page: "CheckIn",      icon: QrCode,          permission: "manageEvents" },
