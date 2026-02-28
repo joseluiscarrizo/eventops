@@ -40,6 +40,7 @@ export default function PersonalForm({ person, onSave, onClose }) {
   });
   const [saving, setSaving] = useState(false);
   const [generatedCode, setGeneratedCode] = useState("");
+  const [coordinators, setCoordinators] = useState([]);
 
   useEffect(() => {
     if (person) {
