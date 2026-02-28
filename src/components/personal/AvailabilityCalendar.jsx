@@ -206,19 +206,47 @@ export default function AvailabilityCalendar({ value = [], onChange }) {
             </div>
           </div>
 
-          {/* Fechas */}
-          <div className={`grid gap-2 ${needsEndDate(newSlot.type) ? "grid-cols-2" : "grid-cols-1"}`}>
+          {/* Días de la semana */}
+          {needsWeekdays(newSlot.type) && (
             <div>
-              <label className="text-xs text-gray-600 mb-1 block">{needsEndDate(newSlot.type) ? "Fecha inicio *" : "Fecha *"}</label>
-              <Input type="date" className="h-8 text-xs" value={newSlot.date_start} onChange={e => setNewSlot(s => ({ ...s, date_start: e.target.value }))} />
-            </div>
-            {needsEndDate(newSlot.type) && (
-              <div>
-                <label className="text-xs text-gray-600 mb-1 block">Fecha fin *</label>
-                <Input type="date" className="h-8 text-xs" value={newSlot.date_end} min={newSlot.date_start} onChange={e => setNewSlot(s => ({ ...s, date_end: e.target.value }))} />
+              <label className="text-xs text-gray-600 mb-2 block font-medium">Selecciona días *</label>
+              <div className="grid grid-cols-4 gap-1.5">
+                {DAY_NAMES_FULL.map((day, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setNewSlot(s => ({
+                      ...s,
+                      weekdays: s.weekdays?.includes(idx) ? s.weekdays.filter(d => d !== idx) : [...(s.weekdays || []), idx]
+                    }))}
+                    className={`text-xs px-2 py-1.5 rounded border transition-colors ${
+                      newSlot.weekdays?.includes(idx)
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "bg-white text-gray-700 border-gray-200 hover:border-blue-300"
+                    }`}
+                  >
+                    {day.slice(0, 3)}
+                  </button>
+                ))}
               </div>
-            )}
-          </div>
+            </div>
+          )}
+
+          {/* Fechas */}
+          {!needsWeekdays(newSlot.type) && (
+            <div className={`grid gap-2 ${needsEndDate(newSlot.type) ? "grid-cols-2" : "grid-cols-1"}`}>
+              <div>
+                <label className="text-xs text-gray-600 mb-1 block">{needsEndDate(newSlot.type) ? "Fecha inicio *" : "Fecha *"}</label>
+                <Input type="date" className="h-8 text-xs" value={newSlot.date_start} onChange={e => setNewSlot(s => ({ ...s, date_start: e.target.value }))} />
+              </div>
+              {needsEndDate(newSlot.type) && (
+                <div>
+                  <label className="text-xs text-gray-600 mb-1 block">Fecha fin *</label>
+                  <Input type="date" className="h-8 text-xs" value={newSlot.date_end} min={newSlot.date_start} onChange={e => setNewSlot(s => ({ ...s, date_end: e.target.value }))} />
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Horas */}
           {needsTime(newSlot.type) && (
