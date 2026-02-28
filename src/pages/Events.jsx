@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search, MapPin, Calendar, Users, Pencil, Trash2 } from "lucide-react";
+import { Plus, Search, MapPin, Calendar, Users, Pencil, Trash2, LayoutGrid, CalendarDays } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import EventForm from "../components/events/EventForm";
 import AssignmentPanel from "@/components/events/AssignmentPanel";
+import EventCalendar from "@/components/events/EventCalendar";
+import { useAppRole, CAN } from "@/components/auth/useAppRole";
 
 const STATUS_LABELS = {
   draft: { label: "Borrador", cls: "bg-gray-100 text-gray-600" },
