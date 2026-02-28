@@ -3,13 +3,27 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Search, Pencil, Trash2, MapPin, Clock, Shirt } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, MapPin, Clock, Shirt, Download, Calendar, List, Users } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import OrderForm from "@/components/orders/OrderForm";
 import OrderCalendar from "@/components/orders/OrderCalendar";
 import OrderStaffManager from "@/components/orders/OrderStaffManager";
 import AltasTab from "@/components/orders/AltasTab";
+import ShiftForm from "@/components/shifts/ShiftForm";
+import ShiftStaffAssigner from "@/components/shifts/ShiftStaffAssigner";
+import ShiftCalendar from "@/components/shifts/ShiftCalendar";
+
+const SHIFT_PROFILE_LABELS = {
+  camarero: "Camarero/a",
+  cocinero: "Cocinero/a",
+  ayudante_cocina: "Ayudante cocina",
+  coctelero: "Coctelero/a",
+  azafata: "Azafata/o",
+};
+const SHIFT_STATUS_LABELS = { draft: "Borrador", published: "Publicado", completed: "Completado", cancelled: "Cancelado" };
+const SHIFT_STATUS_COLORS = { draft: "bg-gray-100 text-gray-700", published: "bg-blue-100 text-blue-700", completed: "bg-green-100 text-green-700", cancelled: "bg-red-100 text-red-700" };
+const SHIFT_PROFILE_COLORS = { camarero: "bg-blue-100 text-blue-800", cocinero: "bg-orange-100 text-orange-800", ayudante_cocina: "bg-yellow-100 text-yellow-800", coctelero: "bg-purple-100 text-purple-800", azafata: "bg-pink-100 text-pink-800" };
 
 const STATUS_LABELS = {
   pending: { label: "Pendiente", cls: "bg-amber-100 text-amber-700" },
