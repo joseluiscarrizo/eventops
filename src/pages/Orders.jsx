@@ -78,6 +78,7 @@ export default function Orders() {
         <TabsList className="mb-4">
           <TabsTrigger value="entrada">Entrada de pedidos</TabsTrigger>
           <TabsTrigger value="gestion">Gestión de pedidos</TabsTrigger>
+          <TabsTrigger value="altas">Altas</TabsTrigger>
         </TabsList>
 
         {/* ── ENTRADA DE PEDIDOS ── */}
