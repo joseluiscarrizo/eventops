@@ -156,7 +156,32 @@ export default function CalendarSync() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Tabs */}
+      <div className="flex gap-2 border-b">
+        <button
+          onClick={() => setActiveTab('events')}
+          className={`px-4 py-2 font-medium text-sm border-b-2 transition-colors ${
+            activeTab === 'events'
+              ? 'border-indigo-500 text-indigo-600'
+              : 'border-transparent text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          Eventos
+        </button>
+        <button
+          onClick={() => setActiveTab('shifts')}
+          className={`px-4 py-2 font-medium text-sm border-b-2 transition-colors ${
+            activeTab === 'shifts'
+              ? 'border-indigo-500 text-indigo-600'
+              : 'border-transparent text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          Turnos
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        {activeTab === 'events' ? (
         {/* App Events */}
         <div className="bg-white rounded-xl border">
           <div className="p-4 border-b font-semibold text-gray-900 flex items-center gap-2">
