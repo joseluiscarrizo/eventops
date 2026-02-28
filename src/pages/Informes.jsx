@@ -371,6 +371,123 @@ export default function Informes() {
         </div>
       )}
 
+      {/* ── PEDIDOS ── */}
+      {tab === "pedidos" && (
+        <div className="space-y-5">
+          {/* Filtros */}
+          <div className="bg-white rounded-xl border p-4 flex flex-wrap gap-4 items-end">
+            <div>
+              <label className="text-xs font-medium text-gray-500 block mb-1">Fecha desde</label>
+              <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
+                className="rounded-md border border-input px-3 py-1.5 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-gray-500 block mb-1">Fecha hasta</label>
+              <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
+                className="rounded-md border border-input px-3 py-1.5 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-gray-500 block mb-1">Tipo de evento</label>
+              <Select value={orderEventType} onValueChange={setOrderEventType}>
+                <SelectTrigger className="w-40"><SelectValue placeholder="Todos" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos</SelectItem>
+                  {Object.entries(EVENT_TYPE_LABELS).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-xs font-medium text-gray-500 block mb-1">Estado</label>
+              <Select value={orderStatus} onValueChange={setOrderStatus}>
+                <SelectTrigger className="w-40"><SelectValue placeholder="Todos" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos</SelectItem>
+                  {Object.entries(STATUS_LABELS).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <button
+              onClick={() => {
+                const rows = reportOrders.map(o => ({
+                  "Nº Pedido": o.order_number || "",
+                  "Cliente": o.client_name || "",
+                  "Lugar del evento": o.event_place || "",
+                  "Fecha": o.event_date || "",
+                  "Tipo": EVENT_TYPE_LABELS[o.event_type] || o.event_type || "",
+                  "Estado": STATUS_LABELS[o.status] || o.status || "",
+                  "Desplazamiento": o.displacement ? "Sí" : "No",
+                  "Hora entrada 1": o.entry_time_1 || "",
+                  "Hora entrada 2": o.entry_time_2 || "",
+                  "Hora entrada 3": o.entry_time_3 || "",
+                  "Camisa": o.shirt_color === "white" ? "Blanca" : o.shirt_color === "black" ? "Negra" : "",
+                  "Notas": o.notes || "",
+                }));
+                exportCSV(rows, `pedidos_${dateFrom || "inicio"}_${dateTo || "fin"}.csv`);
+              }}
+              disabled={reportOrders.length === 0}
+              className="ml-auto flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg disabled:opacity-40 transition-colors"
+            >
+              <Download className="w-4 h-4" /> Exportar CSV ({reportOrders.length})
+            </button>
+          </div>
+
+          {/* KPIs del reporte */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { label: "Total pedidos", value: reportOrders.length, color: "bg-indigo-50 text-indigo-700" },
+              { label: "Completados", value: reportOrders.filter(o => o.status === "completed").length, color: "bg-emerald-50 text-emerald-700" },
+              { label: "Cancelados", value: reportOrders.filter(o => o.status === "cancelled").length, color: "bg-red-50 text-red-700" },
+              { label: "Con desplazamiento", value: reportOrders.filter(o => o.displacement).length, color: "bg-amber-50 text-amber-700" },
+            ].map(kpi => (
+              <div key={kpi.label} className={`rounded-xl border p-4 text-center ${kpi.color}`}>
+                <div className="text-2xl font-bold">{kpi.value}</div>
+                <div className="text-xs mt-0.5 opacity-80">{kpi.label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tabla de pedidos */}
+          <div className="bg-white rounded-xl border overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 border-b">
+                  <tr className="text-left text-gray-500">
+                    <th className="px-4 py-3 font-medium">Nº Pedido</th>
+                    <th className="px-4 py-3 font-medium">Cliente</th>
+                    <th className="px-4 py-3 font-medium">Lugar</th>
+                    <th className="px-4 py-3 font-medium">Fecha</th>
+                    <th className="px-4 py-3 font-medium">Tipo</th>
+                    <th className="px-4 py-3 font-medium">Estado</th>
+                    <th className="px-4 py-3 font-medium">Despl.</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  {reportOrders.length === 0 ? (
+                    <tr><td colSpan={7} className="text-center py-10 text-gray-400">Sin pedidos para los filtros seleccionados</td></tr>
+                  ) : reportOrders.map(o => (
+                    <tr key={o.id} className="text-gray-700 hover:bg-gray-50">
+                      <td className="px-4 py-3 font-mono text-xs text-indigo-600">{o.order_number}</td>
+                      <td className="px-4 py-3 font-medium">{o.client_name}</td>
+                      <td className="px-4 py-3 text-gray-500">{o.event_place}</td>
+                      <td className="px-4 py-3 text-gray-500">{o.event_date || "—"}</td>
+                      <td className="px-4 py-3">
+                        {o.event_type && <span className="text-xs bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full">{EVENT_TYPE_LABELS[o.event_type] || o.event_type}</span>}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                          { pending: "bg-yellow-100 text-yellow-700", confirmed: "bg-blue-100 text-blue-700", in_progress: "bg-purple-100 text-purple-700", completed: "bg-emerald-100 text-emerald-700", cancelled: "bg-red-100 text-red-700" }[o.status] || "bg-gray-100 text-gray-600"
+                        }`}>{STATUS_LABELS[o.status] || o.status}</span>
+                      </td>
+                      <td className="px-4 py-3 text-center">{o.displacement ? "✓" : "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── POR CLIENTE ── */}
       {tab === "cliente" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
