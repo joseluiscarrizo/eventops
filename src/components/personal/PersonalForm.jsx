@@ -283,8 +283,15 @@ export default function PersonalForm({ person, onSave, onClose }) {
                 <Input value={form.languages} onChange={e => set("languages", e.target.value)} placeholder="Ej: Español, Inglés, Francés..." />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1">Disponibilidad</label>
+                <label className="text-sm font-medium text-gray-700 block mb-1">Disponibilidad general</label>
                 <Input value={form.availability} onChange={e => set("availability", e.target.value)} placeholder="Ej: Fines de semana, Jornada completa..." />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-2">Calendario de disponibilidad</label>
+                <AvailabilityCalendar
+                  value={form.availability_schedule || []}
+                  onChange={v => set("availability_schedule", v)}
+                />
               </div>
             </TabsContent>
           </Tabs>
