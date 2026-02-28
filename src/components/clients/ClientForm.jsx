@@ -16,6 +16,8 @@ export default function ClientForm({ client, onSave, onClose }) {
     notes: "",
   });
   const [saving, setSaving] = useState(false);
+  const [syncingHub, setSyncingHub] = useState(false);
+  const [hubSynced, setHubSynced] = useState(false);
 
   useEffect(() => {
     if (client) setForm({ ...form, ...client });
@@ -26,16 +28,43 @@ export default function ClientForm({ client, onSave, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
+    let savedClient;
     if (client) {
-      await base44.entities.Client.update(client.id, form);
+      savedClient = await base44.entities.Client.update(client.id, form);
     } else {
-      // Generate code: get count then assign CLIXXX
       const all = await base44.entities.Client.list("-created_date", 500);
       const num = String(all.length + 1).padStart(3, "0");
-      await base44.entities.Client.create({ ...form, code: `CLI${num}` });
+      savedClient = await base44.entities.Client.create({ ...form, code: `CLI${num}` });
+      // Auto-create contact in HubSpot for new clients
+      if (savedClient?.id) {
+        base44.functions.invoke('hubspotContacts', { action: 'create_contact', client_id: savedClient.id }).catch(() => {});
+      }
     }
     setSaving(false);
     onSave();
+  };
+
+  const syncFromHubSpot = async () => {
+    setSyncingHub(true);
+    try {
+      const query = form.name || form.email_1 || "";
+      const res = await base44.functions.invoke('hubspotContacts', { action: 'search_contacts', query });
+      const contacts = res.data?.contacts || [];
+      if (contacts.length > 0) {
+        const c = contacts[0].properties;
+        const updates = {};
+        if (c.email && !form.email_1) updates.email_1 = c.email;
+        if (c.phone && !form.phone_1) updates.phone_1 = c.phone;
+        if ((c.firstname || c.lastname) && !form.contact_person_1) {
+          updates.contact_person_1 = [c.firstname, c.lastname].filter(Boolean).join(' ');
+        }
+        if (Object.keys(updates).length > 0) {
+          setForm(f => ({ ...f, ...updates }));
+          setHubSynced(true);
+        }
+      }
+    } catch (e) {}
+    setSyncingHub(false);
   };
 
   return (
