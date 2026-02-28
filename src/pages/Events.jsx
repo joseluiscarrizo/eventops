@@ -57,15 +57,35 @@ export default function Events() {
           <h1 className="text-2xl font-bold text-gray-900">Eventos</h1>
           <p className="text-gray-500 mt-1">{events.length} eventos registrados</p>
         </div>
-        <Button onClick={() => { setEditing(null); setShowForm(true); }} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2">
-          <Plus className="w-4 h-4" /> Nuevo evento
-        </Button>
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+            <button
+              onClick={() => setViewMode("grid")}
+              className={`p-1.5 rounded-md transition-colors ${viewMode === "grid" ? "bg-white shadow text-gray-900" : "text-gray-400 hover:text-gray-700"}`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setViewMode("calendar")}
+              className={`p-1.5 rounded-md transition-colors ${viewMode === "calendar" ? "bg-white shadow text-gray-900" : "text-gray-400 hover:text-gray-700"}`}
+            >
+              <CalendarDays className="w-4 h-4" />
+            </button>
+          </div>
+          {canEdit && (
+            <Button onClick={() => { setEditing(null); setShowForm(true); }} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2">
+              <Plus className="w-4 h-4" /> Nuevo evento
+            </Button>
+          )}
+        </div>
       </div>
 
+      {viewMode === "grid" && (
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <Input className="pl-9" placeholder="Buscar evento..." value={search} onChange={e => setSearch(e.target.value)} />
       </div>
+      )}
 
       {loading ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
