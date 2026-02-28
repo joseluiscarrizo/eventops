@@ -267,7 +267,7 @@ export default function PersonalForm({ person, onSave, onClose }) {
             )}
 
             {/* ── HABILIDADES ── */}
-            <TabsContent value="skills" className="p-5 space-y-4">
+            <TabsContent value="skills" className="p-5 space-y-4 overflow-y-auto max-h-[65vh]">
               <div>
                 <label className="text-sm font-medium text-gray-700 block mb-1">Certificaciones</label>
                 <textarea
