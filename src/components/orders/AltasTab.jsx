@@ -49,10 +49,26 @@ export default function AltasTab() {
     setLoading(false);
   };
 
+  const fireNotification = async (row, action) => {
+    const personName = `${row.person?.first_name || ""} ${row.person?.last_name || ""}`.trim();
+    base44.functions.invoke("notifyOrderChange", {
+      type: "assignment_change",
+      order_id: row.order_id,
+      order_number: row.order?.order_number,
+      client_name: row.order?.client_name,
+      event_place: row.order?.event_place,
+      event_date: row.order?.event_date,
+      personal_name: personName,
+      profile_type: PROFILE_LABELS[row.profile_type] || row.profile_type,
+      assignment_action: action,
+    }).catch(() => {});
+  };
+
   const handleAlta = async (row) => {
     setActionLoading(prev => ({ ...prev, [row.id]: "alta" }));
     await base44.entities.OrderAssignment.update(row.id, { status: "confirmed" });
     setRows(prev => prev.map(r => r.id === row.id ? { ...r, status: "confirmed" } : r));
+    fireNotification(row, "confirmed");
     setActionLoading(prev => ({ ...prev, [row.id]: null }));
   };
 
@@ -60,6 +76,7 @@ export default function AltasTab() {
     setActionLoading(prev => ({ ...prev, [row.id]: "baja" }));
     await base44.entities.OrderAssignment.update(row.id, { status: "cancelled" });
     setRows(prev => prev.map(r => r.id === row.id ? { ...r, status: "cancelled" } : r));
+    fireNotification(row, "cancelled");
     setActionLoading(prev => ({ ...prev, [row.id]: null }));
   };
 
