@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useAppRole, CAN } from "@/components/auth/useAppRole";
 import ChatWindow from "@/components/chat/ChatWindow";
-import ChatSidebar from "@/components/chat/ChatSidebar";
+import ChatSidebar from "@/components/chat/ChatSidebar.jsx";
 import { MessageSquare } from "lucide-react";
 
 export default function Chat() {
