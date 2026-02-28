@@ -24,6 +24,14 @@ const STATUS_COLORS = {
   apercibido: "bg-red-100 text-red-700",
 };
 
+const PROFILE_LABELS = {
+  camarero: "Camarero/a", cocinero: "Cocinero/a",
+  ayudante_cocina: "Ayudante cocina", coctelero: "Coctelero/a", azafata: "Azafata/o",
+};
+const SHIFT_STATUS_COLORS = { pending: "bg-yellow-100 text-yellow-800", confirmed: "bg-green-100 text-green-800", cancelled: "bg-red-100 text-red-700" };
+const SHIFT_STATUS_LABELS = { pending: "Pendiente", confirmed: "Confirmado", cancelled: "Cancelado" };
+const ABS_TYPES = { vacaciones: "Vacaciones", baja_medica: "Baja médica", permiso: "Permiso", otros: "Otros" };
+
 const isUnavailable = (p) => {
   if (!p.unavailable_until) return false;
   return p.unavailable_until >= new Date().toISOString().slice(0, 10);
