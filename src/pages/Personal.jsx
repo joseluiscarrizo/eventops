@@ -38,6 +38,7 @@ const isUnavailable = (p) => {
 };
 
 export default function Personal() {
+  const { user } = useAppRole();
   const [personnel, setPersonnel] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -48,16 +49,38 @@ export default function Personal() {
   const [activeTab, setActiveTab] = useState("lista");
   const [showReasonModal, setShowReasonModal] = useState(null);
   const [apercibimientoReason, setApercibimientoReason] = useState("");
+  
+  // Mi horario state
+  const [assignments, setAssignments] = useState([]);
+  const [shifts, setShifts] = useState([]);
+  const [absences, setAbsences] = useState([]);
+  const [myPersonal, setMyPersonal] = useState(null);
+  const [showAbsenceForm, setShowAbsenceForm] = useState(false);
+  const [absForm, setAbsForm] = useState({ type: "vacaciones", date_start: "", date_end: "", reason: "" });
+  const [saving, setSaving] = useState(false);
 
-  const load = () => {
+  const load = async () => {
     setLoading(true);
-    base44.entities.Personal.list("-created_date", 300).then(data => {
+    await base44.entities.Personal.list("-created_date", 300).then(data => {
       setPersonnel(data);
-      setLoading(false);
     });
+    // Load current user's schedule data
+    if (user?.personal_id) {
+      const [assigns, allShifts, abs] = await Promise.all([
+        base44.entities.ShiftAssignment.filter({ personal_id: user.personal_id }),
+        base44.entities.Shift.list("-date", 200),
+        base44.entities.Absence.filter({ personal_id: user.personal_id }),
+      ]);
+      setAssignments(assigns.filter(a => a.status !== "cancelled"));
+      setShifts(allShifts);
+      setAbsences(abs);
+      const pers = await base44.entities.Personal.filter({ id: user.personal_id });
+      if (pers.length) setMyPersonal(pers[0]);
+    }
+    setLoading(false);
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [user]);
 
   const handleDelete = async (id) => {
     if (!confirm("¿Eliminar este miembro del personal?")) return;
