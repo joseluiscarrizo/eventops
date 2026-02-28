@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
       alertsSent++;
     }
 
-    // ── 2. Eventos próximos en 24h → notificar coordinadores ──
+    // ── 2. Eventos próximos en 24h → notificar personal asignado y admins ──
     const events = await base44.asServiceRole.entities.Event.list('-date_start', 200);
     const upcomingEvents = events.filter(e => {
       if (!e.date_start || e.status === 'completed' || e.status === 'cancelled') return false;
@@ -55,44 +55,39 @@ Deno.serve(async (req) => {
     });
 
     for (const event of upcomingEvents) {
-      // Get personal assigned to this event via assignments or all coordinators
-      const personal = await base44.asServiceRole.entities.Personal.filter({ status: 'active' });
-      const coordinators = [...new Set(personal.map(p => p.coordinator).filter(Boolean))];
+      const title = `📅 Evento próximo: ${event.name}`;
+      const message = `El evento "${event.name}" comienza en menos de 24 horas${event.location ? ` en ${event.location}` : ''}. Por favor, verifica que todo esté preparado.`;
 
-      for (const coordName of coordinators) {
-        const coordPerson = personal.find(p => `${p.first_name} ${p.last_name}` === coordName && p.email);
-        
-        // Check duplicate
-        const existing = await base44.asServiceRole.entities.Notification.filter({
-          related_id: event.id,
-          type: 'event_reminder',
-          recipient_email: coordPerson?.email || coordName,
-        });
-        if (existing.length > 0) continue;
+      const notifiedEmails = new Set();
 
-        const title = `📅 Evento próximo: ${event.name}`;
-        const message = `El evento "${event.name}" comienza en menos de 24 horas${event.location ? ` en ${event.location}` : ''}. Por favor, verifica que todo esté preparado.`;
+      // Notify staff assigned via StaffMember assignments
+      const assignments = await base44.asServiceRole.entities.Assignment.filter({ event_id: event.id });
+      const staffIds = [...new Set(assignments.map(a => a.staff_member_id).filter(Boolean))];
+      for (const staffId of staffIds) {
+        const staffList = await base44.asServiceRole.entities.StaffMember.filter({ id: staffId });
+        const staff = staffList[0];
+        if (!staff?.email || notifiedEmails.has(staff.email)) continue;
 
-        await base44.asServiceRole.entities.Notification.create({
-          recipient_email: coordPerson?.email || '',
-          recipient_name: coordName,
-          type: 'event_reminder',
-          title,
-          message,
-          related_id: event.id,
-          related_type: 'event',
-          read: false,
-          email_sent: false,
-        });
+        const existing = await base44.asServiceRole.entities.Notification.filter({ related_id: event.id, type: 'event_reminder', recipient_email: staff.email });
+        if (existing.length > 0) { notifiedEmails.add(staff.email); continue; }
 
-        if (coordPerson?.email) {
-          await base44.asServiceRole.integrations.Core.SendEmail({
-            to: coordPerson.email,
-            subject: title,
-            body: `<p>${message}</p>`,
-          });
-          alertsSent++;
-        }
+        notifiedEmails.add(staff.email);
+        await base44.asServiceRole.entities.Notification.create({ recipient_email: staff.email, recipient_name: staff.full_name, type: 'event_reminder', title, message, related_id: event.id, related_type: 'event', read: false, email_sent: false });
+        await base44.asServiceRole.integrations.Core.SendEmail({ to: staff.email, subject: title, body: `<p>${message}</p>` });
+        alertsSent++;
+      }
+
+      // Notify admins
+      const users = await base44.asServiceRole.entities.User.list();
+      const admins = users.filter(u => u.role === 'admin');
+      for (const admin of admins) {
+        if (!admin.email || notifiedEmails.has(admin.email)) continue;
+        const existing = await base44.asServiceRole.entities.Notification.filter({ related_id: event.id, type: 'event_reminder', recipient_email: admin.email });
+        if (existing.length > 0) { notifiedEmails.add(admin.email); continue; }
+
+        notifiedEmails.add(admin.email);
+        await base44.asServiceRole.entities.Notification.create({ recipient_email: admin.email, recipient_name: admin.full_name || admin.email, type: 'event_reminder', title, message, related_id: event.id, related_type: 'event', read: false, email_sent: false });
+        alertsSent++;
       }
     }
 
