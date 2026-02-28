@@ -17,7 +17,8 @@ import {
   Settings,
   CalendarClock,
   User,
-  MessageSquare
+  MessageSquare,
+  Bot
 } from "lucide-react";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import { base44 } from "@/api/base44Client";
