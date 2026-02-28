@@ -15,6 +15,8 @@ const TYPE_CONFIG = {
   weekdays:   { label: "Días de la semana", icon: "📅", color: "bg-orange-500",  light: "bg-orange-100 text-orange-800", border: "border-orange-300" },
   weekdays_h: { label: "Días sem. + Horas", icon: "⏰", color: "bg-red-500",     light: "bg-red-100 text-red-800",      border: "border-red-300" },
   month:      { label: "Mes completo",      icon: "📅", color: "bg-purple-500",  light: "bg-purple-100 text-purple-800", border: "border-purple-300" },
+  recurring_simple:   { label: "Recurrencia simple",    icon: "🔄", color: "bg-green-500",   light: "bg-green-100 text-green-800",   border: "border-green-300" },
+  recurring_advanced: { label: "Recurrencia avanzada",  icon: "🔁", color: "bg-lime-500",    light: "bg-lime-100 text-lime-800",     border: "border-lime-300" },
 };
 
 const EMPTY_SLOT = { type: "day", date_start: "", date_end: "", time_start: "", time_end: "", label: "", weekdays: [] };
