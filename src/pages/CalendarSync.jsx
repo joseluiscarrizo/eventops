@@ -19,12 +19,16 @@ export default function CalendarSync() {
     setLoading(true);
     setError(null);
     try {
-      const [appEvs, gcalRes] = await Promise.all([
+      const [appEvs, gcalRes, appShiftsRes, gcalShiftsRes] = await Promise.all([
         base44.entities.Event.list("-date_start", 50),
         base44.functions.invoke('getGoogleCalendarEvents', {}),
+        base44.entities.Shift.list("-date", 100),
+        base44.functions.invoke('syncShiftsFromGoogle', {}),
       ]);
       setAppEvents(appEvs);
       setGoogleEvents(gcalRes.data?.events || []);
+      setAppShifts(appShiftsRes);
+      setGoogleShifts(gcalShiftsRes.data?.events || []);
     } catch (e) {
       setError("No se pudieron cargar los eventos de Google Calendar.");
     }
