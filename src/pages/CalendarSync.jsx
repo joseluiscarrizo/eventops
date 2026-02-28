@@ -367,10 +367,10 @@ export default function CalendarSync() {
                     </a>
                   </div>
                 ))
-              )}
+                )}
+              </div>
             </div>
-          </div>
-        </>
+          </>
         )}
       </div>
     </div>
