@@ -128,6 +128,33 @@ export default function Personal() {
     active: personnel.filter(p => p.profile_type === key && p.status === "active").length,
   }));
 
+  // Mi horario logic
+  const myShifts = assignments.map(a => {
+    const shift = shifts.find(s => s.id === a.shift_id);
+    return shift ? { ...shift, assignStatus: a.status, assignId: a.id } : null;
+  }).filter(Boolean).sort((a, b) => a.date.localeCompare(b.date));
+
+  const upcoming = myShifts.filter(s => s.date >= new Date().toISOString().slice(0, 10));
+  const past = myShifts.filter(s => s.date < new Date().toISOString().slice(0, 10));
+
+  const handleAbsenceSave = async () => {
+    if (!absForm.date_start || !absForm.date_end || !user?.personal_id) return;
+    setSaving(true);
+    await base44.entities.Absence.create({
+      personal_id: user.personal_id,
+      personal_name: myPersonal ? `${myPersonal.first_name} ${myPersonal.last_name}` : user.full_name,
+      type: absForm.type,
+      date_start: absForm.date_start,
+      date_end: absForm.date_end,
+      reason: absForm.reason,
+      status: "pending",
+    });
+    setSaving(false);
+    setShowAbsenceForm(false);
+    setAbsForm({ type: "vacaciones", date_start: "", date_end: "", reason: "" });
+    load();
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
