@@ -109,8 +109,8 @@ export default function PersonalForm({ person, onSave, onClose }) {
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <Tabs defaultValue="general" className="w-full">
+        <form onSubmit={handleSubmit} className="flex flex-col min-h-0">
+          <Tabs defaultValue="general" className="w-full flex flex-col">
             <div className="px-5 pt-4">
               <TabsList className="w-full">
                 <TabsTrigger value="general" className="flex-1">General</TabsTrigger>
