@@ -115,6 +115,39 @@ export default function OrderForm({ order, onSave, onClose }) {
             </div>
           </div>
 
+          {/* HubSpot client info panel */}
+          {loadingHub && (
+            <div className="bg-orange-50 border border-orange-100 rounded-lg px-3 py-2 text-xs text-orange-500 animate-pulse">
+              Cargando datos de HubSpot CRM...
+            </div>
+          )}
+          {!loadingHub && hubClient && (
+            <div className="bg-orange-50 border border-orange-100 rounded-lg px-3 py-2 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-orange-700">📋 Datos del cliente (HubSpot CRM)</span>
+                {hubClient.hubspot_company_id && (
+                  <a href={`https://app.hubspot.com/contacts/companies/${hubClient.hubspot_company_id}`} target="_blank" rel="noopener noreferrer" className="text-xs text-orange-500 hover:underline">Ver en CRM</a>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-gray-600">
+                {hubClient.contact_person_1 && <div className="flex items-center gap-1"><User className="w-3 h-3 text-orange-400" />{hubClient.contact_person_1}</div>}
+                {hubClient.contact_person_2 && <div className="flex items-center gap-1"><User className="w-3 h-3 text-orange-400" />{hubClient.contact_person_2}</div>}
+                {hubClient.phone_1 && <div className="flex items-center gap-1"><Phone className="w-3 h-3 text-orange-400" />{hubClient.phone_1}</div>}
+                {hubClient.email_1 && <div className="flex items-center gap-1"><Mail className="w-3 h-3 text-orange-400" />{hubClient.email_1}</div>}
+              </div>
+              {hubClient.hubContacts?.length > 0 && (
+                <div className="border-t border-orange-100 pt-1.5 mt-1">
+                  <span className="text-xs text-orange-600 font-medium">Contactos CRM: </span>
+                  {hubClient.hubContacts.map(c => (
+                    <span key={c.id} className="text-xs text-gray-500 mr-2">
+                      {c.properties?.firstname} {c.properties?.lastname}{c.properties?.email ? ` (${c.properties.email})` : ''}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Lugar del evento */}
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">Lugar del evento *</label>
