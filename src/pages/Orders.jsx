@@ -151,6 +151,7 @@ export default function Orders() {
           <TabsTrigger value="entrada">Entrada de pedidos</TabsTrigger>
           <TabsTrigger value="gestion">Gestión de pedidos</TabsTrigger>
           <TabsTrigger value="altas">Altas</TabsTrigger>
+          <TabsTrigger value="turnos">Turnos</TabsTrigger>
         </TabsList>
 
         {/* ── ENTRADA DE PEDIDOS ── */}
