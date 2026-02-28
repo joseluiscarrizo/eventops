@@ -52,8 +52,19 @@ export default function Orders() {
   };
 
   const handleStatusChange = async (order, status) => {
+    const oldStatus = order.status;
     await base44.entities.Order.update(order.id, { status });
     setOrders(prev => prev.map(o => o.id === order.id ? { ...o, status } : o));
+    base44.functions.invoke("notifyOrderChange", {
+      type: "status_change",
+      order_id: order.id,
+      order_number: order.order_number,
+      client_name: order.client_name,
+      event_place: order.event_place,
+      event_date: order.event_date,
+      old_status: oldStatus,
+      new_status: status,
+    }).catch(() => {});
   };
 
   const filtered = orders.filter(o =>
