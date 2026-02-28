@@ -8,9 +8,12 @@ import { es } from "date-fns/locale";
 export default function CalendarSync() {
   const [googleEvents, setGoogleEvents] = useState([]);
   const [appEvents, setAppEvents] = useState([]);
+  const [googleShifts, setGoogleShifts] = useState([]);
+  const [appShifts, setAppShifts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState({});
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('events');
 
   const loadData = async () => {
     setLoading(true);
