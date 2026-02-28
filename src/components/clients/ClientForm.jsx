@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { X } from "lucide-react";
+import { X, RefreshCw, CheckCircle2 } from "lucide-react";
 
 export default function ClientForm({ client, onSave, onClose }) {
   const [form, setForm] = useState({
