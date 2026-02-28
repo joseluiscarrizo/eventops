@@ -121,10 +121,22 @@ export default function Informes() {
 
   // ── Filtros aplicados ──
   const filteredOrders = useMemo(() => {
+    let result = orders;
     if (tab === "cliente" && selectedClient !== "all")
-      return orders.filter(o => o.client_id === selectedClient);
-    return orders;
+      result = result.filter(o => o.client_id === selectedClient);
+    return result;
   }, [orders, tab, selectedClient]);
+
+  // Pedidos filtrados por rango de fecha, tipo evento y estado
+  const reportOrders = useMemo(() => {
+    return orders.filter(o => {
+      if (dateFrom && o.event_date && o.event_date < dateFrom) return false;
+      if (dateTo && o.event_date && o.event_date > dateTo) return false;
+      if (orderEventType !== "all" && o.event_type !== orderEventType) return false;
+      if (orderStatus !== "all" && o.status !== orderStatus) return false;
+      return true;
+    });
+  }, [orders, dateFrom, dateTo, orderEventType, orderStatus]);
 
   const filteredPersonal = useMemo(() => {
     if (tab === "perfil" && selectedProfile !== "all")
