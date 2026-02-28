@@ -17,10 +17,13 @@ const TYPE_CONFIG = {
   month:      { label: "Mes completo",      icon: "📅", color: "bg-purple-500",  light: "bg-purple-100 text-purple-800", border: "border-purple-300" },
 };
 
-const EMPTY_SLOT = { type: "day", date_start: "", date_end: "", time_start: "", time_end: "", label: "" };
+const EMPTY_SLOT = { type: "day", date_start: "", date_end: "", time_start: "", time_end: "", label: "", weekdays: [] };
+
+const DAY_NAMES_FULL = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
 function needsEndDate(type) { return ["range", "range_hours", "week", "week_hours", "month"].includes(type); }
-function needsTime(type) { return ["day_hours", "range_hours", "week_hours"].includes(type); }
+function needsTime(type) { return ["day_hours", "range_hours", "week_hours", "weekdays_h"].includes(type); }
+function needsWeekdays(type) { return ["weekdays", "weekdays_h"].includes(type); }
 
 function slotCoversDay(s, dayStr) {
   if (s.type === "day" || s.type === "day_hours") return s.date_start === dayStr;
