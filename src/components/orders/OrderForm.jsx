@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { X, Plus, Trash2, MapPin } from "lucide-react";
+import { X, Plus, Trash2, MapPin, Phone, Mail, User } from "lucide-react";
 
 export default function OrderForm({ order, onSave, onClose }) {
   const [clients, setClients] = useState([]);
