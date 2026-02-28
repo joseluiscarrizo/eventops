@@ -195,6 +195,7 @@ export default function Personal() {
               </span>
             )}
           </TabsTrigger>
+          {user?.personal_id && <TabsTrigger value="mihorario">Mi horario</TabsTrigger>}
         </TabsList>
 
         <TabsContent value="lista">
