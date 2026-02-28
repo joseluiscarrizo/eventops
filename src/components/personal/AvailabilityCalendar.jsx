@@ -270,7 +270,14 @@ export default function AvailabilityCalendar({ value = [], onChange }) {
 
           <div className="flex gap-2 justify-end pt-1">
             <button type="button" onClick={() => { setShowForm(false); setSelectedDay(null); }} className="text-xs px-3 py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 bg-white">Cancelar</button>
-            <button type="button" onClick={addSlot} disabled={!newSlot.date_start} className="text-xs px-4 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">Añadir</button>
+            <button
+              type="button"
+              onClick={addSlot}
+              disabled={needsWeekdays(newSlot.type) ? !newSlot.weekdays?.length : !newSlot.date_start}
+              className="text-xs px-4 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            >
+              Añadir
+            </button>
           </div>
         </div>
       )}
