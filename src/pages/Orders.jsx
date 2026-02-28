@@ -45,6 +45,17 @@ export default function Orders() {
   const [assignments, setAssignments] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
+  // Shifts state
+  const [shifts, setShifts] = useState([]);
+  const [absences, setAbsences] = useState([]);
+  const [shiftAssignments, setShiftAssignments] = useState([]);
+  const [shiftsLoading, setShiftsLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("calendar");
+  const [showShiftForm, setShowShiftForm] = useState(false);
+  const [editShift, setEditShift] = useState(null);
+  const [assignShift, setAssignShift] = useState(null);
+  const [filterProfile, setFilterProfile] = useState("all");
+
   const load = () => {
     setLoading(true);
     Promise.all([
@@ -56,6 +67,42 @@ export default function Orders() {
       setLoading(false);
     });
   };
+
+  const loadShifts = async () => {
+    setShiftsLoading(true);
+    const [s, abs, assgn] = await Promise.all([
+      base44.entities.Shift.list("-date", 500),
+      base44.entities.Absence.filter({ status: "approved" }),
+      base44.entities.ShiftAssignment.list("-created_date", 1000),
+    ]);
+    setShifts(s);
+    setAbsences(abs);
+    setShiftAssignments(assgn);
+    setShiftsLoading(false);
+  };
+
+  const getShiftAssignmentCount = (shiftId) =>
+    shiftAssignments.filter(a => a.shift_id === shiftId && a.status !== "cancelled").length;
+
+  const exportShiftsCSV = () => {
+    const rows = [["Turno", "Fecha", "Inicio", "Fin", "Perfil", "Plazas", "Pedido", "Lugar", "Estado"]];
+    [...shifts].sort((a, b) => a.date.localeCompare(b.date)).forEach(s => {
+      rows.push([s.title || "", s.date, s.time_start, s.time_end, SHIFT_PROFILE_LABELS[s.profile_required] || s.profile_required, s.slots || 1, s.order_name || "", s.location || "", SHIFT_STATUS_LABELS[s.status] || s.status]);
+      shiftAssignments.filter(a => a.shift_id === s.id && a.status !== "cancelled").forEach(a => {
+        rows.push(["", "", "", "", "", "", `  → ${a.personal_name}`, `Estado: ${a.status}`, ""]);
+      });
+    });
+    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `turnos_${format(new Date(), "yyyy-MM-dd")}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const filteredShifts = filterProfile === "all" ? shifts : shifts.filter(s => s.profile_required === filterProfile);
 
   useEffect(() => { load(); }, []);
 
