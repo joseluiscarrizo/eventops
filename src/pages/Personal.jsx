@@ -447,8 +447,7 @@ export default function Personal() {
                 </div>
               </details>
             )}
-          </TabsContent>
-        )}
+        </TabsContent>
       </Tabs>
 
       {/* Modal motivo apercibimiento */}
