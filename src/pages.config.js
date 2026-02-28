@@ -58,6 +58,7 @@ import Personal from './pages/Personal';
 import Shifts from './pages/Shifts';
 import Staff from './pages/Staff';
 import Settings from './pages/Settings';
+import MiHorario from './pages/MiHorario';
 import __Layout from './Layout.jsx';
 
 
@@ -73,6 +74,7 @@ export const PAGES = {
     "Shifts": Shifts,
     "Staff": Staff,
     "Settings": Settings,
+    "MiHorario": MiHorario,
 }
 
 export const pagesConfig = {
