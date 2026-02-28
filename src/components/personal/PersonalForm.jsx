@@ -292,6 +292,8 @@ export default function PersonalForm({ person, onSave, onClose }) {
                 <AvailabilityCalendar
                   value={form.availability_schedule || []}
                   onChange={v => set("availability_schedule", v)}
+                  settings={form.availability_settings || {}}
+                  onSettingsChange={s => set("availability_settings", s)}
                 />
               </div>
             </TabsContent>
