@@ -47,11 +47,11 @@ export default function CheckIn() {
     setActionMsg({ type: action, name });
     setTimeout(() => setActionMsg(null), 3000);
 
-    // Enviar mensajes de confirmación al escanear QR (check-in)
-    if (action === "checked_in") {
+    // Enviar mensajes al escanear QR (check-in y check-out)
+    if (action === "checked_in" || action === "checked_out") {
       base44.functions.invoke("notifyCheckIn", {
         assignment_id: assignment.id,
-        action: "checked_in",
+        action,
       }).catch(() => {}); // fire and forget
     }
   };
