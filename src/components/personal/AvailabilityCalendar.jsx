@@ -69,11 +69,12 @@ function slotSummary(s) {
   return { label, dates, times, cfg };
 }
 
-export default function AvailabilityCalendar({ value = [], onChange }) {
+export default function AvailabilityCalendar({ value = [], onChange, settings = {}, onSettingsChange }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showForm, setShowForm] = useState(false);
   const [newSlot, setNewSlot] = useState({ ...EMPTY_SLOT });
   const [selectedDay, setSelectedDay] = useState(null);
+  const [expandedList, setExpandedList] = useState(false);
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
