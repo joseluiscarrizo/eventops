@@ -24,7 +24,16 @@ export default function EventForm({ event, onSave, onClose }) {
     setSaving(true);
     const data = { ...form, capacity: form.capacity ? Number(form.capacity) : undefined };
     if (event?.id) {
+      const oldStatus = event.status;
       await base44.entities.Event.update(event.id, data);
+      // Notify if status changed
+      if (oldStatus !== form.status) {
+        base44.functions.invoke('notifyEventStatusChange', {
+          event_id: event.id,
+          old_status: oldStatus,
+          new_status: form.status,
+        }).catch(() => {});
+      }
     } else {
       await base44.entities.Event.create(data);
     }
