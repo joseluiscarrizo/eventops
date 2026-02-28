@@ -60,6 +60,13 @@ function slotSummary(s) {
   let dates = "";
   if (needsWeekdays(s.type)) {
     dates = s.weekdays?.map(d => DAY_NAMES_FULL[d]).join(", ") || "";
+  } else if (needsRecurringPattern(s.type)) {
+    const patternLabels = {
+      weekly: "Cada semana", bi_weekly: "Cada 2 semanas", monthly: "Cada mes",
+      first_monday: "1er lunes", first_friday: "1er viernes",
+      last_monday: "Último lunes", last_friday: "Último viernes"
+    };
+    dates = patternLabels[s.recurring_pattern] || "";
   } else {
     dates = s.date_start || "";
     if (needsEndDate(s.type) && s.date_end && s.date_end !== s.date_start) dates += ` → ${s.date_end}`;
