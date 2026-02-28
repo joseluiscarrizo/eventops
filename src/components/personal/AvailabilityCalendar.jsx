@@ -4,6 +4,9 @@ import { es } from "date-fns/locale";
 import { ChevronLeft, ChevronRight, Plus, X, Clock, Calendar, CalendarRange, CalendarDays } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import AvailabilitySettings from "./AvailabilitySettings";
+import RecurringPatternSelector from "./RecurringPatternSelector";
+import SlotConstraints from "./SlotConstraints";
 
 const TYPE_CONFIG = {
   day:        { label: "Día concreto",      icon: "📅", color: "bg-blue-500",    light: "bg-blue-100 text-blue-800",    border: "border-blue-300" },
