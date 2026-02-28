@@ -261,7 +261,7 @@ export default function PersonalForm({ person, onSave, onClose }) {
 
             {/* ── AUSENCIAS ── */}
             {person && (
-              <TabsContent value="absences" className="p-5">
+              <TabsContent value="absences" className="p-5 overflow-y-auto max-h-[65vh]">
                 <AbsenceManager person={person} />
               </TabsContent>
             )}
