@@ -25,6 +25,8 @@ export default function OrderForm({ order, onSave, onClose }) {
   const [showTime2, setShowTime2] = useState(false);
   const [showTime3, setShowTime3] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [hubClient, setHubClient] = useState(null);
+  const [loadingHub, setLoadingHub] = useState(false);
 
   useEffect(() => {
     base44.entities.Client.list("-created_date", 200).then(setClients);
@@ -37,10 +39,23 @@ export default function OrderForm({ order, onSave, onClose }) {
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-  const handleClientChange = (id) => {
+  const handleClientChange = async (id) => {
     const client = clients.find(c => c.id === id);
     set("client_id", id);
     set("client_name", client?.name || "");
+    setHubClient(null);
+    // Load HubSpot data for selected client
+    if (client?.hubspot_company_id) {
+      setLoadingHub(true);
+      try {
+        const res = await base44.functions.invoke('hubspotGetCompany', { company_id: client.hubspot_company_id });
+        if (res.data?.contacts?.length > 0) setHubClient({ ...client, hubContacts: res.data.contacts });
+        else setHubClient(client);
+      } catch (e) {}
+      setLoadingHub(false);
+    } else {
+      setHubClient(client || null);
+    }
   };
 
   const mapsUrl = form.location
