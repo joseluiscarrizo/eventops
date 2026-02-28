@@ -46,6 +46,14 @@ export default function CheckIn() {
     const name = getStaff(assignment.staff_member_id)?.full_name || "";
     setActionMsg({ type: action, name });
     setTimeout(() => setActionMsg(null), 3000);
+
+    // Enviar mensajes de confirmación al escanear QR (check-in)
+    if (action === "checked_in") {
+      base44.functions.invoke("notifyCheckIn", {
+        assignment_id: assignment.id,
+        action: "checked_in",
+      }).catch(() => {}); // fire and forget
+    }
   };
 
   const filtered = assignments.filter(a => {
