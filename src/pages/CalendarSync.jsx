@@ -279,6 +279,97 @@ export default function CalendarSync() {
             )}
           </div>
         </div>
+        ) : (
+        <>
+          {/* App Shifts */}
+          <div className="bg-white rounded-xl border">
+            <div className="p-4 border-b font-semibold text-gray-900 flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-indigo-500" />
+              Turnos en EventOps
+            </div>
+            <div className="divide-y max-h-[500px] overflow-y-auto">
+              {loading ? (
+                Array(4).fill(0).map((_, i) => (
+                  <div key={i} className="p-4 animate-pulse flex gap-3">
+                    <div className="w-8 h-8 bg-gray-100 rounded-lg" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-3 bg-gray-100 rounded w-2/3" />
+                      <div className="h-3 bg-gray-100 rounded w-1/3" />
+                    </div>
+                  </div>
+                ))
+              ) : appShifts.length === 0 ? (
+                <div className="p-8 text-center text-gray-400 text-sm">No hay turnos</div>
+              ) : (
+                appShifts.map(shift => (
+                  <div key={shift.id} className="p-4 flex items-center gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-sm text-gray-900 truncate">{shift.title}</div>
+                      <div className="text-xs text-gray-500">{formatDate(shift.date + 'T' + shift.time_start)}</div>
+                      <div className="text-xs text-gray-400">{shift.profile_required}</div>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-xs h-7 px-2"
+                      disabled={syncing[shift.id]}
+                      onClick={() => syncShiftToGoogle(shift, shift.personal_id)}
+                    >
+                      {syncing[shift.id] ? (
+                        <RefreshCw className="w-3 h-3 animate-spin" />
+                      ) : "Sincronizar"}
+                    </Button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Google Calendar Shifts */}
+          <div className="bg-white rounded-xl border">
+            <div className="p-4 border-b font-semibold text-gray-900 flex items-center gap-2">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg" className="w-4 h-4" alt="" />
+              Turnos en Google Calendar
+              <span className="ml-auto text-xs text-gray-400 font-normal">Próximos 90 días</span>
+            </div>
+            <div className="divide-y max-h-[500px] overflow-y-auto">
+              {loading ? (
+                Array(4).fill(0).map((_, i) => (
+                  <div key={i} className="p-4 animate-pulse flex gap-3">
+                    <div className="w-8 h-8 bg-gray-100 rounded-lg" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-3 bg-gray-100 rounded w-2/3" />
+                      <div className="h-3 bg-gray-100 rounded w-1/3" />
+                    </div>
+                  </div>
+                ))
+              ) : googleShifts.length === 0 ? (
+                <div className="p-8 text-center text-gray-400 text-sm">No hay turnos en Google Calendar</div>
+              ) : (
+                googleShifts.map(shift => (
+                  <div key={shift.id} className="p-4 flex items-center gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-sm text-gray-900 truncate">{shift.title}</div>
+                      <div className="text-xs text-gray-500">{formatDate(shift.start)}</div>
+                      {shift.location && (
+                        <div className="text-xs text-gray-400 truncate">{shift.location}</div>
+                      )}
+                    </div>
+                    <a
+                      href={shift.htmlLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-indigo-500 hover:text-indigo-700"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </>
+        )}
       </div>
     </div>
   );
