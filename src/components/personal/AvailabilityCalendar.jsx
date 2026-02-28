@@ -113,6 +113,8 @@ export default function AvailabilityCalendar({ value = [], onChange, settings = 
   const addSlot = () => {
     if (needsWeekdays(newSlot.type)) {
       if (!newSlot.weekdays?.length) return;
+    } else if (needsRecurringPattern(newSlot.type)) {
+      if (!newSlot.recurring_pattern) return;
     } else {
       if (!newSlot.date_start) return;
     }
@@ -120,6 +122,7 @@ export default function AvailabilityCalendar({ value = [], onChange, settings = 
     if (!needsEndDate(slot.type)) { slot.date_end = slot.date_start; }
     if (!needsTime(slot.type)) { slot.time_start = ""; slot.time_end = ""; }
     if (!needsWeekdays(slot.type)) { slot.weekdays = []; }
+    if (!needsRecurringPattern(slot.type)) { slot.recurring_pattern = null; slot.recurring_until = ""; }
     onChange([...value, slot]);
     setNewSlot({ ...EMPTY_SLOT });
     setShowForm(false);
