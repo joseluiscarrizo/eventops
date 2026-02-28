@@ -39,8 +39,13 @@ function slotCoversDay(s, dayStr) {
 function slotSummary(s) {
   const cfg = TYPE_CONFIG[s.type] || TYPE_CONFIG.day;
   const label = s.label || cfg.label;
-  let dates = s.date_start || "";
-  if (needsEndDate(s.type) && s.date_end && s.date_end !== s.date_start) dates += ` → ${s.date_end}`;
+  let dates = "";
+  if (needsWeekdays(s.type)) {
+    dates = s.weekdays?.map(d => DAY_NAMES_FULL[d]).join(", ") || "";
+  } else {
+    dates = s.date_start || "";
+    if (needsEndDate(s.type) && s.date_end && s.date_end !== s.date_start) dates += ` → ${s.date_end}`;
+  }
   let times = "";
   if (needsTime(s.type) && s.time_start) times = ` ${s.time_start}${s.time_end ? `–${s.time_end}` : ""}`;
   return { label, dates, times, cfg };
