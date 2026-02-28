@@ -43,6 +43,12 @@ export default function PersonalForm({ person, onSave, onClose }) {
   const [coordinators, setCoordinators] = useState([]);
 
   useEffect(() => {
+    const loadCoordinators = async () => {
+      const allPersonal = await base44.entities.Personal.list();
+      setCoordinators(allPersonal);
+    };
+    loadCoordinators();
+    
     if (person) {
       setForm({ ...form, ...person });
       setGeneratedCode(person.code || "");
