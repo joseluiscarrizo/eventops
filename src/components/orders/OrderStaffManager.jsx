@@ -38,6 +38,7 @@ export default function OrderStaffManager({ order, onClose }) {
   const [searchPersonal, setSearchPersonal] = useState("");
 
   const [absences, setAbsences] = useState([]);
+  const [syncingToGoogle, setSyncingToGoogle] = useState({});
 
   const load = useCallback(async () => {
     setLoading(true);
