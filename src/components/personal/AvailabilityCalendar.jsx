@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isToday, parseISO, isWithinInterval, startOfDay } from "date-fns";
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isToday } from "date-fns";
 import { es } from "date-fns/locale";
-import { ChevronLeft, ChevronRight, Plus, X, Clock, Calendar, CalendarRange, CalendarDays } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, X, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import AvailabilitySettings from "./AvailabilitySettings";
 import RecurringPatternSelector from "./RecurringPatternSelector";
 import SlotConstraints from "./SlotConstraints";

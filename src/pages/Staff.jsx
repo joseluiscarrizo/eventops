@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Plus, Search, Mail, Phone, Pencil, Trash2 } from "lucide-react";
 import StaffForm from "../components/staff/StaffForm";
 

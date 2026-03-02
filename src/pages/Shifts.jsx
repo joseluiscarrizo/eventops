@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Plus, Download, Calendar, List, Pencil, Trash2, Users } from "lucide-react";
 import { format } from "date-fns";
 import ShiftForm from "@/components/shifts/ShiftForm";

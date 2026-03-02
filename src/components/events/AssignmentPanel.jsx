@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { X, UserPlus, Trash2, CheckCircle2, Clock } from "lucide-react";
+import { X, UserPlus, Trash2 } from "lucide-react";
 
 const STATUS_MAP = {
   pending: { label: "Pendiente", cls: "bg-gray-100 text-gray-600" },

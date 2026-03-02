@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Plus, Trash2, CalendarOff, CheckCircle2, Clock, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { format, parseISO, isWithinInterval } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 
 const ABSENCE_TYPES = {

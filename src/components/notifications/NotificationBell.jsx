@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
-import { Bell, X, CheckCheck, Package, Calendar, UserCheck, AlertTriangle, MessageSquare } from "lucide-react";
+import { Bell, X, CheckCheck, Package, Calendar, UserCheck, MessageSquare } from "lucide-react";
 
 const TYPE_CONFIG = {
   assignment: { icon: UserCheck,     bg: "bg-blue-50",   border: "border-blue-200",   text: "text-blue-700",   dot: "bg-blue-500"   },

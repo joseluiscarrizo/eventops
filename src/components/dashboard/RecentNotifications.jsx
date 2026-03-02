@@ -1,6 +1,4 @@
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
-import { Bell, ArrowRight, Package, CalendarCheck, UserCheck, Info } from "lucide-react";
+import { Bell, Package, CalendarCheck, UserCheck, Info } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 
