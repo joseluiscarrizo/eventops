@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
+import { toast } from "sonner";
 import { Calendar, RefreshCw, ExternalLink, CheckCircle2, Clock, AlertCircle, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
@@ -46,7 +47,7 @@ export default function CalendarSync() {
       });
       await loadData();
     } catch (e) {
-      alert("Error al sincronizar: " + e.message);
+      toast.error("Error al sincronizar: " + e.message);
     }
     setSyncing(prev => ({ ...prev, [event.id]: false }));
   };
@@ -76,7 +77,7 @@ export default function CalendarSync() {
       });
       await loadData();
     } catch (e) {
-      alert("Error al sincronizar turno: " + e.message);
+      toast.error("Error al sincronizar turno: " + e.message);
     }
     setSyncing(prev => ({ ...prev, [shift.id]: false }));
   };
@@ -91,7 +92,7 @@ export default function CalendarSync() {
       });
       await loadData();
     } catch (e) {
-      alert("Error al eliminar turno: " + e.message);
+      toast.error("Error al eliminar turno: " + e.message);
     }
     setSyncing(prev => ({ ...prev, [shift.id]: false }));
   };
