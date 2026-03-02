@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useAppRole } from "@/components/auth/useAppRole";
-import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, MapPin, AlertTriangle, Plus } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";

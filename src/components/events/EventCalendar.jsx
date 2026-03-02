@@ -2,8 +2,7 @@ import { useState } from "react";
 import {
   format, startOfMonth, endOfMonth, startOfWeek, endOfWeek,
   addDays, addMonths, subMonths, addWeeks, subWeeks,
-  isSameDay, isSameMonth, startOfDay, addHours, parseISO,
-  setHours, setMinutes
+  isSameDay, isSameMonth, parseISO
 } from "date-fns";
 import { es } from "date-fns/locale";
 import { ChevronLeft, ChevronRight, MapPin, Clock } from "lucide-react";

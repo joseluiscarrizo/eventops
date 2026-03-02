@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
@@ -15,7 +15,6 @@ import {
   UserCog,
   BarChart2,
   Settings,
-  CalendarClock,
   User,
   MessageSquare,
   Bot,

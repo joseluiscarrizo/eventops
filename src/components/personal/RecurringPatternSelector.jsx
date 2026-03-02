@@ -1,6 +1,5 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { AlertCircle, Info } from "lucide-react";
+import { Info } from "lucide-react";
 
 const RECURRING_PATTERNS = {
   simple: [

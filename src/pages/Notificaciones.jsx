@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Bell, CheckCheck, Trash2, Package, Calendar, UserCheck, MessageSquare, Settings, X } from "lucide-react";
+import { Bell, CheckCheck, Trash2, Package, Calendar, UserCheck, MessageSquare, Settings } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 
