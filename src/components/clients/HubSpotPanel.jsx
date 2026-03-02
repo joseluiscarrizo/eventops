@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
+import { toast } from "sonner";
 import { RefreshCw, CheckCircle2, Users, Phone, Mail, X, ExternalLink, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -43,7 +44,7 @@ export default function HubSpotPanel({ client, onSynced, onClose }) {
         onSynced?.();
       }
     } catch (e) {
-      alert("Error al sincronizar: " + e.message);
+      toast.error("Error al sincronizar: " + e.message);
     }
     setSyncing(false);
   };

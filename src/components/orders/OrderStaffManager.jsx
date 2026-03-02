@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
+import { toast } from "sonner";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { X, Plus, Trash2, CheckCircle2, Clock, XCircle, AlertTriangle, Calendar } from "lucide-react";
 import { format } from "date-fns";
@@ -102,9 +103,9 @@ export default function OrderStaffManager({ order, onClose }) {
         personal_id: assignment.personal_id,
         action: 'create',
       });
-      alert("Turno sincronizado con Google Calendar");
+      toast.success("Turno sincronizado con Google Calendar");
     } catch (e) {
-      alert("Error al sincronizar: " + e.message);
+      toast.error("Error al sincronizar: " + e.message);
     }
     setSyncingToGoogle(prev => ({ ...prev, [assignment.id]: false }));
   };
