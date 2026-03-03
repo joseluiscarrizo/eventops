@@ -1,5 +1,5 @@
 # 🔍 Informe de Auditoría Técnica — EventOps
-**Fecha:** 2026-03-02  
+**Fecha:** 2026-03-03  
 **Auditor:** GitHub Copilot Agent (Senior Software Engineer)  
 **Repositorio:** joseluiscarrizo/eventops  
 **Rama:** main
@@ -42,16 +42,18 @@ El stack tecnológico es moderno y bien elegido. El código es legible y sigue p
 |-----------|:------------:|:--------------:|
 | Seguridad — autenticación BaaS | 🔴 2/10 | ✅ 9/10 |
 | Seguridad — credenciales | 🟡 7/10 | ✅ 9/10 |
-| Metadatos HTML / SEO | 🔴 3/10 | ✅ 9/10 |
+| Metadatos HTML / SEO | 🔴 3/10 | ✅ 10/10 |
 | UX notificaciones (no alerts) | 🟠 4/10 | ✅ 10/10 |
 | Documentación de entorno | 🔴 0/10 | ✅ 9/10 |
+| Cabeceras de seguridad HTTP | 🔴 0/10 | ✅ 9/10 |
+| Despliegue / CI config | 🔴 0/10 | ✅ 9/10 |
 | Funciones serverless | ✅ 9/10 | ✅ 9/10 |
 | Componentes React | ✅ 8/10 | ✅ 8/10 |
 | Manejo de errores frontend | 🔴 3/10 | ✅ 8/10 |
 | Build y configuración Vite | 🟡 6/10 | ✅ 8/10 |
 | RBAC / autorización | 🟡 6/10 | 🟡 6/10 |
 | Tests | 🔴 0/10 | 🔴 0/10 |
-| **Total** | **~4/10** | **~8/10** |
+| **Total** | **~4/10** | **~8.5/10** |
 
 ---
 
@@ -71,9 +73,16 @@ El stack tecnológico es moderno y bien elegido. El código es legible y sigue p
 | F09 | 🟠 Alta | `src/pages/Dashboard.jsx` | Queries sin manejo de error explícito — el Promise.all fallaba silenciosamente sin notificar al usuario | ✅ Corregido Fase 1 |
 | F10 | 🟡 Media | Múltiples páginas | Varias páginas hacen `base44.entities.X.list(sort, limit)` sin paginación real — riesgo de carga masiva con muchos datos | 📋 Pendiente Fase 2 |
 | F11 | 🟡 Media | `vite.config.js` | `sourcemap` no configurado — en producción sin sourcemaps ocultos es difícil depurar errores | ✅ Corregido Fase 1 |
+<<<<<<< copilot/sanitize-repo-issues
+| F12 | 🟡 Media | `src/components/auth/` | RBAC implementado con `useAppRole` — bien estructurado pero sin tests de cobertura | 📋 Pendiente Fase 3 |
+| F13 | 🔴 Crítica | — | Sin ningún test unitario, de integración ni e2e — riesgo de regresiones | 📋 Pendiente Fase 3 |
+| F14 | 🟠 Alta | `index.html` | Falta `<meta name="theme-color">` — afecta PWA y experiencia móvil | ✅ Corregido Fase 1 |
+| F15 | 🟠 Alta | — | Sin `netlify.toml` — sin cabeceras de seguridad HTTP ni redirect SPA para despliegue en Netlify | ✅ Corregido Fase 1 |
+=======
 | F12 | 🟡 Media | `src/pages/Settings.jsx` | Línea de código muerto `await base44.auth.updateMe ? null : null; // no-op` sin ningún efecto | ✅ Corregido Fase 1 |
 | F13 | 🟡 Media | `src/components/auth/` | RBAC implementado con `useAppRole` — bien estructurado pero sin tests de cobertura | 📋 Pendiente Fase 3 |
 | F14 | 🔴 Crítica | — | Sin ningún test unitario, de integración ni e2e — riesgo de regresiones | 📋 Pendiente Fase 3 |
+>>>>>>> main
 
 ---
 
@@ -148,6 +157,28 @@ Se importó `toast` de `sonner` y se reemplazaron los tres `alert()` de error al
 
 ---
 
+<<<<<<< copilot/sanitize-repo-issues
+### 8. `index.html` — `<meta name="theme-color">`
+Se añadió `<meta name="theme-color" content="#1e3a5f">` para mejorar la experiencia en dispositivos móviles y PWA, usando el azul marino corporativo del proyecto.
+
+---
+
+### 9. `netlify.toml` — Configuración de despliegue y cabeceras de seguridad HTTP
+Se creó el archivo `netlify.toml` con:
+- Comando de build: `npm run build`
+- Directorio de publicación: `dist`
+- Redirect `/* → /index.html` para SPA (React Router)
+- Cabeceras HTTP de seguridad para todos los recursos:
+  - `X-Frame-Options: DENY`
+  - `X-Content-Type-Options: nosniff`
+  - `X-XSS-Protection: 1; mode=block`
+  - `Referrer-Policy: strict-origin-when-cross-origin`
+
+---
+
+### 10. `vite.config.js` — `sourcemap: 'hidden'`
+Se añadió `build.sourcemap: 'hidden'` para generar sourcemaps en producción sin exponerlos públicamente, facilitando la depuración de errores en producción.
+=======
 ### 8. `src/pages/Dashboard.jsx` — Manejo de errores en Promise.all
 **Antes:**
 ```js
@@ -189,6 +220,7 @@ build: {
 }
 ```
 **Impacto:** Con `sourcemap: 'hidden'` los sourcemaps se generan pero no se referencian desde el bundle, lo que permite usar herramientas de monitorización (Sentry, etc.) para depurar errores en producción sin exponer el código fuente al navegador del usuario.
+>>>>>>> main
 
 ---
 
@@ -211,8 +243,7 @@ build: {
 |---|-------|-----------|:---------:|
 | 3.1 | Configurar Vitest con React Testing Library y escribir tests unitarios para hooks críticos (`useAppRole`, `AuthContext`) | `src/lib/`, `src/components/auth/` | 🔴 Crítica |
 | 3.2 | Añadir tests de integración para flujos clave: asignación de personal, creación de pedido, check-in | `src/__tests__/` | 🔴 Crítica |
-| 3.3 | Configurar `sourcemap: 'hidden'` en Vite para mejorar la depuración de errores en producción sin exponer código fuente | `vite.config.js` | 🟡 Media |
-| 3.4 | Activar code splitting (lazy imports) para reducir el bundle inicial (actualmente 1.39 MB — supera los 500 KB recomendados) | `src/App.jsx`, `src/pages.config.js` | 🟡 Media |
-| 3.5 | Añadir `CHANGELOG.md` y `CONTRIBUTING.md` al repositorio | raíz | 🟡 Media |
-| 3.6 | Configurar Sentry o similar para monitorización de errores en producción | `src/main.jsx` | 🟡 Media |
-| 3.7 | Revisar y documentar el flujo de autenticación completo en `README.md` | `README.md` | 🟢 Baja |
+| 3.3 | Activar code splitting (lazy imports) para reducir el bundle inicial (actualmente 1.39 MB — supera los 500 KB recomendados) | `src/App.jsx`, `src/pages.config.js` | 🟡 Media |
+| 3.4 | Añadir `CHANGELOG.md` y `CONTRIBUTING.md` al repositorio | raíz | 🟡 Media |
+| 3.5 | Configurar Sentry o similar para monitorización de errores en producción | `src/main.jsx` | 🟡 Media |
+| 3.6 | Revisar y documentar el flujo de autenticación completo en `README.md` | `README.md` | 🟢 Baja |
