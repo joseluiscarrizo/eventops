@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { toast } from "sonner";
 import { startOfToday, format } from "date-fns";
 
 import StatsCards from "@/components/dashboard/StatsCards";
@@ -28,6 +29,9 @@ export default function Dashboard() {
       base44.entities.Notification.list("-created_date", 30),
     ]).then(([events, orders, personal, absences, shifts, shiftAssignments, notifications]) => {
       setData({ events, orders, personal, absences, shifts, shiftAssignments, notifications });
+    }).catch((err) => {
+      toast.error("Error al cargar el dashboard: " + (err?.message || "Error desconocido"));
+    }).finally(() => {
       setLoading(false);
     });
   }, []);

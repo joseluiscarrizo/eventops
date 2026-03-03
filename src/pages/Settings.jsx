@@ -62,7 +62,6 @@ export default function Settings() {
     const update = changes[user.id];
     if (!update) return;
     setSaving(s => ({ ...s, [user.id]: true }));
-    await base44.auth.updateMe ? null : null; // no-op
     await base44.entities.User.update(user.id, update);
     setSaving(s => ({ ...s, [user.id]: false }));
     setChanges(prev => { const n = { ...prev }; delete n[user.id]; return n; });

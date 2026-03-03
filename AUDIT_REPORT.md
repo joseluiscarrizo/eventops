@@ -10,7 +10,7 @@
 
 **EventOps** es una plataforma SaaS de gestión operativa para empresas de catering y organización de eventos. Permite gestionar eventos, pedidos, personal, turnos, ausencias, check-ins, sincronización con Google Calendar e integración con HubSpot CRM.
 
-El stack tecnológico es moderno y bien elegido. El código es legible y sigue patrones consistentes. Se detectaron **5 issues críticos/altos** que fueron corregidos en esta Fase 1, y **6 issues de severidad media** documentados para Fase 2.
+El stack tecnológico es moderno y bien elegido. El código es legible y sigue patrones consistentes. Se detectaron **7 issues críticos/altos** que fueron corregidos en esta Fase 1, y **6 issues de severidad media** documentados para Fase 2.
 
 ---
 
@@ -49,6 +49,8 @@ El stack tecnológico es moderno y bien elegido. El código es legible y sigue p
 | Despliegue / CI config | 🔴 0/10 | ✅ 9/10 |
 | Funciones serverless | ✅ 9/10 | ✅ 9/10 |
 | Componentes React | ✅ 8/10 | ✅ 8/10 |
+| Manejo de errores frontend | 🔴 3/10 | ✅ 8/10 |
+| Build y configuración Vite | 🟡 6/10 | ✅ 8/10 |
 | RBAC / autorización | 🟡 6/10 | 🟡 6/10 |
 | Tests | 🔴 0/10 | 🔴 0/10 |
 | **Total** | **~4/10** | **~8.5/10** |
@@ -61,19 +63,26 @@ El stack tecnológico es moderno y bien elegido. El código es legible y sigue p
 |----|:---------:|---------|-------------|:------:|
 | F01 | 🔴 Crítica | `src/api/base44Client.js` | `requiresAuth: false` — cualquier usuario no autenticado puede acceder a la API del BaaS | ✅ Corregido Fase 1 |
 | F02 | 🔴 Crítica | `index.html` | Título genérico "Base44 APP", `lang="en"`, favicon externo a base44.com, sin meta description ni OG tags | ✅ Corregido Fase 1 |
+| F02b | 🔴 Crítica | `index.html` | `meta name="theme-color"` ausente y `manifest.json` referenciado pero sin crear | ✅ Corregido Fase 1 |
 | F03 | 🔴 Crítica | — | Ausencia total de `.env.example` — ningún desarrollador sabe qué variables configurar | ✅ Corregido Fase 1 |
 | F04 | 🟠 Alta | `index.html` | Favicon apuntaba a URL externa (`https://base44.com/logo_v2.svg`) — dependencia externa frágil | ✅ Corregido Fase 1 |
 | F05 | 🟠 Alta | `src/components/clients/HubSpotPanel.jsx` | Uso de `alert()` nativo del navegador en lugar del sistema de notificaciones del proyecto (sonner) | ✅ Corregido Fase 1 |
 | F06 | 🟠 Alta | `src/components/orders/OrderStaffManager.jsx` | Dos `alert()` (éxito y error de sync con Google Calendar) en lugar de `toast` | ✅ Corregido Fase 1 |
 | F07 | 🟠 Alta | `src/pages/CalendarSync.jsx` | Tres `alert()` (errores de sync/delete turno/evento) en lugar de `toast` | ✅ Corregido Fase 1 |
 | F08 | 🟡 Media | `functions/*.ts` | SDK de Base44 fijado a `@0.8.6` en funciones Deno, pero `^0.8.18` en frontend — versión desincronizada | 📋 Pendiente Fase 2 |
-| F09 | 🟡 Media | `src/pages/Dashboard.jsx` | Queries sin manejo de error explícito (sin `.catch()` ni try/catch) — fallos silenciosos | 📋 Pendiente Fase 2 |
+| F09 | 🟠 Alta | `src/pages/Dashboard.jsx` | Queries sin manejo de error explícito — el Promise.all fallaba silenciosamente sin notificar al usuario | ✅ Corregido Fase 1 |
 | F10 | 🟡 Media | Múltiples páginas | Varias páginas hacen `base44.entities.X.list(sort, limit)` sin paginación real — riesgo de carga masiva con muchos datos | 📋 Pendiente Fase 2 |
 | F11 | 🟡 Media | `vite.config.js` | `sourcemap` no configurado — en producción sin sourcemaps ocultos es difícil depurar errores | ✅ Corregido Fase 1 |
+<<<<<<< copilot/sanitize-repo-issues
 | F12 | 🟡 Media | `src/components/auth/` | RBAC implementado con `useAppRole` — bien estructurado pero sin tests de cobertura | 📋 Pendiente Fase 3 |
 | F13 | 🔴 Crítica | — | Sin ningún test unitario, de integración ni e2e — riesgo de regresiones | 📋 Pendiente Fase 3 |
 | F14 | 🟠 Alta | `index.html` | Falta `<meta name="theme-color">` — afecta PWA y experiencia móvil | ✅ Corregido Fase 1 |
 | F15 | 🟠 Alta | — | Sin `netlify.toml` — sin cabeceras de seguridad HTTP ni redirect SPA para despliegue en Netlify | ✅ Corregido Fase 1 |
+=======
+| F12 | 🟡 Media | `src/pages/Settings.jsx` | Línea de código muerto `await base44.auth.updateMe ? null : null; // no-op` sin ningún efecto | ✅ Corregido Fase 1 |
+| F13 | 🟡 Media | `src/components/auth/` | RBAC implementado con `useAppRole` — bien estructurado pero sin tests de cobertura | 📋 Pendiente Fase 3 |
+| F14 | 🔴 Crítica | — | Sin ningún test unitario, de integración ni e2e — riesgo de regresiones | 📋 Pendiente Fase 3 |
+>>>>>>> main
 
 ---
 
@@ -113,6 +122,12 @@ requiresAuth: true,
 
 ---
 
+### 2b. `index.html` — `meta theme-color` y `public/manifest.json`
+Se añadió `<meta name="theme-color" content="#4F46E5" />` para que los navegadores móviles muestren el color de marca en la barra de estado.
+Se creó `public/manifest.json` con nombre, descripción, colores y referencia al favicon SVG, ya que el HTML lo referenciaba pero el archivo no existía.
+
+---
+
 ### 3. `public/favicon.svg` — Favicon propio del proyecto
 Se creó un favicon SVG propio con los colores de la marca (indigo + emerald), eliminando la dependencia del favicon externo de base44.com.
 
@@ -142,6 +157,7 @@ Se importó `toast` de `sonner` y se reemplazaron los tres `alert()` de error al
 
 ---
 
+<<<<<<< copilot/sanitize-repo-issues
 ### 8. `index.html` — `<meta name="theme-color">`
 Se añadió `<meta name="theme-color" content="#1e3a5f">` para mejorar la experiencia en dispositivos móviles y PWA, usando el azul marino corporativo del proyecto.
 
@@ -162,6 +178,49 @@ Se creó el archivo `netlify.toml` con:
 
 ### 10. `vite.config.js` — `sourcemap: 'hidden'`
 Se añadió `build.sourcemap: 'hidden'` para generar sourcemaps en producción sin exponerlos públicamente, facilitando la depuración de errores en producción.
+=======
+### 8. `src/pages/Dashboard.jsx` — Manejo de errores en Promise.all
+**Antes:**
+```js
+Promise.all([...]).then(([...]) => {
+  setData({...});
+  setLoading(false);
+});
+```
+**Después:**
+```js
+Promise.all([...]).then(([...]) => {
+  setData({...});
+}).catch((err) => {
+  toast.error("Error al cargar el dashboard: " + (err?.message || "Error desconocido"));
+}).finally(() => {
+  setLoading(false);
+});
+```
+**Impacto:** Sin `.catch()`, cualquier error de red o API hacía que el spinner girara indefinidamente y el usuario no recibía ninguna notificación del problema. Con este fix el error se muestra como toast y el loading se resetea correctamente.
+
+---
+
+### 9. `src/pages/Settings.jsx` — Eliminación de código muerto
+**Antes:**
+```js
+await base44.auth.updateMe ? null : null; // no-op
+```
+**Después:** Línea eliminada.  
+**Impacto:** Código sin efecto que causaba confusión sobre la intención del desarrollador.
+
+---
+
+### 10. `vite.config.js` — Sourcemaps ocultos para producción
+**Antes:** Sin configuración de `build.sourcemap`.  
+**Después:**
+```js
+build: {
+  sourcemap: 'hidden',
+}
+```
+**Impacto:** Con `sourcemap: 'hidden'` los sourcemaps se generan pero no se referencian desde el bundle, lo que permite usar herramientas de monitorización (Sentry, etc.) para depurar errores en producción sin exponer el código fuente al navegador del usuario.
+>>>>>>> main
 
 ---
 

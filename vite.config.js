@@ -8,6 +8,9 @@ export default defineConfig({
     sourcemap: 'hidden',
   },
   logLevel: 'error', // Suppress warnings, only show errors
+  build: {
+    sourcemap: 'hidden', // Generate hidden sourcemaps for production debugging without exposing source
+  },
   plugins: [
     base44({
       // Support for legacy code that imports the base44 SDK with @/integrations, @/entities, etc.
