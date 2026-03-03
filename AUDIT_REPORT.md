@@ -10,7 +10,7 @@
 
 **EventOps** es una plataforma SaaS de gestión operativa para empresas de catering y organización de eventos. Permite gestionar eventos, pedidos, personal, turnos, ausencias, check-ins, sincronización con Google Calendar e integración con HubSpot CRM.
 
-El stack tecnológico es moderno y bien elegido. El código es legible y sigue patrones consistentes. Se detectaron **5 issues críticos/altos** que fueron corregidos en esta Fase 1, y **6 issues de severidad media** documentados para Fase 2.
+El stack tecnológico es moderno y bien elegido. El código es legible y sigue patrones consistentes. Se detectaron **7 issues críticos/altos** que fueron corregidos en esta Fase 1, y **6 issues de severidad media** documentados para Fase 2.
 
 ---
 
@@ -59,6 +59,7 @@ El stack tecnológico es moderno y bien elegido. El código es legible y sigue p
 |----|:---------:|---------|-------------|:------:|
 | F01 | 🔴 Crítica | `src/api/base44Client.js` | `requiresAuth: false` — cualquier usuario no autenticado puede acceder a la API del BaaS | ✅ Corregido Fase 1 |
 | F02 | 🔴 Crítica | `index.html` | Título genérico "Base44 APP", `lang="en"`, favicon externo a base44.com, sin meta description ni OG tags | ✅ Corregido Fase 1 |
+| F02b | 🔴 Crítica | `index.html` | `meta name="theme-color"` ausente y `manifest.json` referenciado pero sin crear | ✅ Corregido Fase 1 |
 | F03 | 🔴 Crítica | — | Ausencia total de `.env.example` — ningún desarrollador sabe qué variables configurar | ✅ Corregido Fase 1 |
 | F04 | 🟠 Alta | `index.html` | Favicon apuntaba a URL externa (`https://base44.com/logo_v2.svg`) — dependencia externa frágil | ✅ Corregido Fase 1 |
 | F05 | 🟠 Alta | `src/components/clients/HubSpotPanel.jsx` | Uso de `alert()` nativo del navegador en lugar del sistema de notificaciones del proyecto (sonner) | ✅ Corregido Fase 1 |
@@ -106,6 +107,12 @@ requiresAuth: true,
 <title>EventOps</title>
 ```
 **Impacto:** Mejora SEO, accesibilidad (lang correcto), independencia de terceros (favicon local) y previsualización en redes sociales (OG tags).
+
+---
+
+### 2b. `index.html` — `meta theme-color` y `public/manifest.json`
+Se añadió `<meta name="theme-color" content="#4F46E5" />` para que los navegadores móviles muestren el color de marca en la barra de estado.
+Se creó `public/manifest.json` con nombre, descripción, colores y referencia al favicon SVG, ya que el HTML lo referenciaba pero el archivo no existía.
 
 ---
 
