@@ -62,6 +62,7 @@ import Personal from './pages/Personal';
 import Settings from './pages/Settings';
 import Shifts from './pages/Shifts';
 import Staff from './pages/Staff';
+import TestPanel from './pages/TestPanel';
 import __Layout from './Layout.jsx';
 
 
@@ -81,6 +82,7 @@ export const PAGES = {
     "Settings": Settings,
     "Shifts": Shifts,
     "Staff": Staff,
+    "TestPanel": TestPanel,
 }
 
 export const pagesConfig = {
