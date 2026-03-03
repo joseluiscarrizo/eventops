@@ -1,124 +1,115 @@
-import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
-import { useAppRole, CAN } from "@/components/auth/useAppRole";
-import ChatWindow from "@/components/chat/ChatWindow";
-import ChatSidebar from "@/components/chat/ChatSidebar.jsx";
-import { MessageSquare } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
+import { MessageCircle, Loader2 } from 'lucide-react';
+import GruposList from '../components/chat/GruposList';
+import ChatWindow from '../components/chat/ChatWindow.jsx';
 
 export default function Chat() {
-  const { user, role } = useAppRole();
-  const [conversations, setConversations] = useState([]);
-  const [selected, setSelected] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [grupoSeleccionado, setGrupoSeleccionado] = useState(null);
+  const [mensajesNoLeidos, setMensajesNoLeidos] = useState({});
 
   useEffect(() => {
-    if (!user) return;
-    loadConversations();
-  }, [user, role]);
+    base44.auth.me().then(setUser).catch(() => setUser(null));
+  }, []);
 
-  const loadConversations = async () => {
-    setLoading(true);
-    const convs = [];
+  const { data: grupos = [], isLoading } = useQuery({
+    queryKey: ['grupos-chat', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      
+      // Obtener todos los grupos activos
+      const todosGrupos = await base44.entities.GrupoChat.filter({ activo: true }, '-created_date');
+      
+      // Si es admin o coordinador, mostrar todos los grupos
+      if (user.role === 'admin' || user.role === 'coordinador') {
+        return todosGrupos;
+      }
+      
+      // Si es camarero, buscar por camarero_id
+      if (user.role === 'camarero' && user.camarero_id) {
+        return todosGrupos.filter(grupo => 
+          grupo.miembros?.some(m => m.user_id === user.camarero_id)
+        );
+      }
+      
+      // Fallback: buscar por user.id
+      return todosGrupos.filter(grupo => 
+        grupo.miembros?.some(m => m.user_id === user.id)
+      );
+    },
+    enabled: !!user?.id,
+    refetchInterval: 5000
+  });
 
-    const isManager = CAN.managePersonal(role);
+  // Calcular mensajes no leídos
+  useEffect(() => {
+    if (!user?.id || grupos.length === 0) return;
 
-    // 1. GROUP CHATS: Events that are "completed" or "in_progress"
-    const events = await base44.entities.Event.filter(
-      { status: isManager ? undefined : "in_progress" }, "-date_start", 50
+    const cargarNoLeidos = async () => {
+      const contadores = {};
+      
+      for (const grupo of grupos) {
+        const mensajes = await base44.entities.MensajeChat.filter({ grupo_id: grupo.id });
+        const noLeidos = mensajes.filter(m => 
+          m.user_id !== user.id && !m.leido_por?.includes(user.id)
+        ).length;
+        contadores[grupo.id] = noLeidos;
+      }
+      
+      setMensajesNoLeidos(contadores);
+    };
+
+    cargarNoLeidos();
+    const interval = setInterval(cargarNoLeidos, 10000);
+    return () => clearInterval(interval);
+  }, [grupos, user?.id]);
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
+      </div>
     );
-    const eventConvs = events
-      .filter(e => ["completed", "in_progress", "published"].includes(e.status))
-      .map(e => ({
-        id: `event_${e.id}`,
-        name: e.name,
-        subtitle: `Evento · ${e.status === "in_progress" ? "En curso" : e.status === "published" ? "Publicado" : "Completado"}`,
-        type: "event",
-        avatar: e.name[0],
-        avatarColor: "bg-indigo-100 text-indigo-700",
-        status: e.status,
-      }));
-    convs.push(...eventConvs);
-
-    if (isManager) {
-      // 2. COORDINATORS CHAT (admin/planificador only)
-      convs.push({
-        id: "coordinators",
-        name: "Coordinadores",
-        subtitle: "Canal interno de coordinación",
-        type: "coordinators",
-        avatar: "C",
-        avatarColor: "bg-violet-100 text-violet-700",
-      });
-
-      // 3. CLIENT CHATS
-      const clients = await base44.entities.Client.list("name", 100);
-      const clientConvs = clients.map(c => ({
-        id: `client_${c.id}`,
-        name: c.name,
-        subtitle: `Cliente · ${c.contact_person_1 || c.email_1 || ""}`,
-        type: "client",
-        avatar: c.name[0],
-        avatarColor: "bg-emerald-100 text-emerald-700",
-      }));
-      convs.push(...clientConvs);
-    } else {
-      // Employee: also see general coordination channel
-      convs.unshift({
-        id: "coordinators",
-        name: "Coordinación",
-        subtitle: "Canal con coordinadores",
-        type: "coordinators",
-        avatar: "C",
-        avatarColor: "bg-violet-100 text-violet-700",
-      });
-    }
-
-    setConversations(convs);
-    setLoading(false);
-  };
-
-  if (!user) return null;
+  }
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex rounded-xl border bg-white shadow-sm overflow-hidden">
-      <div className="w-72 border-r shrink-0 flex flex-col">
-        {loading ? (
-          <div className="p-4 space-y-3">
-            {Array(5).fill(0).map((_, i) => (
-              <div key={i} className="flex items-center gap-3 animate-pulse">
-                <div className="w-9 h-9 rounded-full bg-gray-100" />
-                <div className="flex-1 space-y-1.5">
-                  <div className="h-3.5 bg-gray-100 rounded w-2/3" />
-                  <div className="h-3 bg-gray-100 rounded w-1/2" />
-                </div>
-              </div>
-            ))}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
+            <MessageCircle className="w-8 h-8 text-[#1e3a5f]" />
+            Chat de Eventos
+          </h1>
+          <p className="text-slate-500 mt-2">
+            Comunícate con el equipo asignado a cada evento
+          </p>
+        </div>
+
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
+          </div>
+        ) : grupos.length === 0 ? (
+          <div className="text-center py-12 text-slate-400">
+            <MessageCircle className="w-16 h-16 mx-auto mb-4 opacity-30" />
+            <p className="text-lg font-medium">No tienes grupos de chat</p>
+            <p className="text-sm mt-2">Los grupos se crean automáticamente cuando se confirma un evento</p>
           </div>
         ) : (
-          <ChatSidebar
-            conversations={conversations}
-            currentUser={user}
-            selected={selected}
-            onSelect={setSelected}
-          />
-        )}
-      </div>
-
-      <div className="flex-1 flex flex-col">
-        {selected ? (
-          <ChatWindow
-            conversationId={selected.id}
-            conversationName={selected.name}
-            conversationSubtitle={selected.subtitle}
-            conversationType={selected.type}
-            currentUser={user}
-          />
-        ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-center text-gray-400 gap-3">
-            <MessageSquare className="w-12 h-12 opacity-20" />
-            <div>
-              <p className="text-sm font-medium">Selecciona una conversación</p>
-              <p className="text-xs mt-1 opacity-70">Eventos, coordinadores y clientes</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
+            <div className="md:col-span-1 overflow-y-auto">
+              <GruposList
+                grupos={grupos}
+                grupoSeleccionado={grupoSeleccionado}
+                onSeleccionar={setGrupoSeleccionado}
+                mensajesNoLeidos={mensajesNoLeidos}
+              />
+            </div>
+            
+            <div className="md:col-span-2">
+              <ChatWindow grupo={grupoSeleccionado} user={user} />
             </div>
           </div>
         )}

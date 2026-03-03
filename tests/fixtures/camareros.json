@@ -1,0 +1,38 @@
+[
+  {
+    "id": "camarero-1",
+    "nombre": "Carlos López",
+    "email": "carlos@hosteleria.com",
+    "telefono": "+34 600 111 111",
+    "especialidad": "eventos",
+    "nivel": "senior",
+    "habilidades": ["coctelería", "protocolo"],
+    "valoracion": 4.8,
+    "estado_actual": "disponible",
+    "coordinador_id": "coordinador-1"
+  },
+  {
+    "id": "camarero-2",
+    "nombre": "Ana Martínez",
+    "email": "ana@hosteleria.com",
+    "telefono": "+34 600 222 222",
+    "especialidad": "bodas",
+    "nivel": "expert",
+    "habilidades": ["servicio de mesa", "sumillería"],
+    "valoracion": 4.9,
+    "estado_actual": "disponible",
+    "coordinador_id": "coordinador-1"
+  },
+  {
+    "id": "camarero-3",
+    "nombre": "Pedro Sánchez",
+    "email": "pedro@hosteleria.com",
+    "telefono": "+34 600 333 333",
+    "especialidad": "corporativos",
+    "nivel": "junior",
+    "habilidades": ["bandejas"],
+    "valoracion": 3.5,
+    "estado_actual": "ocupado",
+    "coordinador_id": "coordinador-1"
+  }
+]

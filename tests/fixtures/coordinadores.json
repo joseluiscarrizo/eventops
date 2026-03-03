@@ -1,0 +1,18 @@
+[
+  {
+    "id": "coordinador-1",
+    "nombre": "Laura González",
+    "email": "laura@hosteleria.com",
+    "telefono": "+34 600 999 001",
+    "whatsapp": "+34 600 999 001",
+    "activo": true
+  },
+  {
+    "id": "coordinador-2",
+    "nombre": "Miguel Torres",
+    "email": "miguel@hosteleria.com",
+    "telefono": "+34 600 999 002",
+    "whatsapp": "+34 600 999 002",
+    "activo": true
+  }
+]

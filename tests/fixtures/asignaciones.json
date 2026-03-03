@@ -1,0 +1,32 @@
+[
+  {
+    "id": "asignacion-1",
+    "pedido_id": "pedido-1",
+    "camarero_id": "camarero-1",
+    "turno_index": 0,
+    "estado": "pendiente",
+    "fecha_asignacion": "2026-02-20",
+    "hora_salida": "17:30",
+    "notas": ""
+  },
+  {
+    "id": "asignacion-2",
+    "pedido_id": "pedido-1",
+    "camarero_id": "camarero-2",
+    "turno_index": 0,
+    "estado": "confirmado",
+    "fecha_asignacion": "2026-02-20",
+    "hora_salida": "17:30",
+    "notas": "Confirmado por WhatsApp"
+  },
+  {
+    "id": "asignacion-3",
+    "pedido_id": "pedido-2",
+    "camarero_id": "camarero-3",
+    "turno_index": 1,
+    "estado": "enviado",
+    "fecha_asignacion": "2026-02-21",
+    "hora_salida": "14:30",
+    "notas": ""
+  }
+]

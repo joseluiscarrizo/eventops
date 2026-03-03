@@ -11,13 +11,13 @@ const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl =
 		return defaultValue;
 	}
 	const storageKey = `base44_${toSnakeCase(paramName)}`;
-	const urlParams = new URLSearchParams(window.location.search);
+	const urlParams = new URLSearchParams(globalThis.location.search);
 	const searchParam = urlParams.get(paramName);
 	if (removeFromUrl) {
 		urlParams.delete(paramName);
-		const newUrl = `${window.location.pathname}${urlParams.toString() ? `?${urlParams.toString()}` : ""
-			}${window.location.hash}`;
-		window.history.replaceState({}, document.title, newUrl);
+		const newUrl = `${globalThis.location.pathname}${urlParams.toString() ? `?${urlParams.toString()}` : ""
+			}${globalThis.location.hash}`;
+		globalThis.history.replaceState({}, document.title, newUrl);
 	}
 	if (searchParam) {
 		storage.setItem(storageKey, searchParam);
@@ -35,16 +35,12 @@ const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl =
 }
 
 const getAppParams = () => {
-	if (getAppParamValue("clear_access_token") === 'true') {
-		storage.removeItem('base44_access_token');
-		storage.removeItem('token');
-	}
 	return {
 		appId: getAppParamValue("app_id", { defaultValue: import.meta.env.VITE_BASE44_APP_ID }),
+		serverUrl: getAppParamValue("server_url", { defaultValue: import.meta.env.VITE_BASE44_BACKEND_URL }),
 		token: getAppParamValue("access_token", { removeFromUrl: true }),
-		fromUrl: getAppParamValue("from_url", { defaultValue: window.location.href }),
-		functionsVersion: getAppParamValue("functions_version", { defaultValue: import.meta.env.VITE_BASE44_FUNCTIONS_VERSION }),
-		appBaseUrl: getAppParamValue("app_base_url", { defaultValue: import.meta.env.VITE_BASE44_APP_BASE_URL }),
+		fromUrl: getAppParamValue("from_url", { defaultValue: globalThis.location.href }),
+		functionsVersion: getAppParamValue("functions_version"),
 	}
 }
 

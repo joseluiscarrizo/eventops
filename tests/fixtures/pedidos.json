@@ -1,0 +1,54 @@
+[
+  {
+    "id": "pedido-1",
+    "codigo_pedido": "EVT-001",
+    "cliente": "Empresa ABC",
+    "cliente_id": "cliente-1",
+    "cliente_email_1": "contacto@empresaabc.com",
+    "cliente_telefono_1": "+34 600 000 001",
+    "cliente_persona_contacto_1": "Juan García",
+    "lugar_evento": "Salón Gran Vía, Madrid",
+    "dia": "2026-03-15",
+    "turnos": [
+      {
+        "nombre": "Turno Principal",
+        "hora_inicio": "18:00",
+        "hora_fin": "23:00",
+        "num_camareros": 3
+      }
+    ],
+    "camisa": "blanca",
+    "extra_transporte": false,
+    "notas": "Evento corporativo",
+    "estado": "activo"
+  },
+  {
+    "id": "pedido-2",
+    "codigo_pedido": "EVT-002",
+    "cliente": "Bodas Rodríguez",
+    "cliente_id": "cliente-2",
+    "cliente_email_1": "familia@rodriguez.com",
+    "cliente_telefono_1": "+34 600 000 002",
+    "cliente_persona_contacto_1": "María Rodríguez",
+    "lugar_evento": "Finca El Pinar, Sevilla",
+    "dia": "2026-04-20",
+    "turnos": [
+      {
+        "nombre": "Aperitivo",
+        "hora_inicio": "12:00",
+        "hora_fin": "14:00",
+        "num_camareros": 4
+      },
+      {
+        "nombre": "Banquete",
+        "hora_inicio": "15:00",
+        "hora_fin": "22:00",
+        "num_camareros": 6
+      }
+    ],
+    "camisa": "negra",
+    "extra_transporte": true,
+    "notas": "Boda de 150 personas",
+    "estado": "activo"
+  }
+]

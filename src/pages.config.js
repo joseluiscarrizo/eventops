@@ -47,44 +47,58 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import CalendarSync from './pages/CalendarSync';
+import Altas from './pages/Altas';
+import Asignacion from './pages/Asignacion';
+import Camareros from './pages/Camareros';
 import Chat from './pages/Chat';
-import CheckIn from './pages/CheckIn';
-import ClientChatbot from './pages/ClientChatbot';
-import Clients from './pages/Clients';
-import Dashboard from './pages/Dashboard';
-import Events from './pages/Events';
+import Clientes from './pages/Clientes';
+import Comunicacion from './pages/Comunicacion';
+import ConfiguracionCuenta from './pages/ConfiguracionCuenta';
+import ConfiguracionNotificaciones from './pages/ConfiguracionNotificaciones';
+import ConfirmarServicio from './pages/ConfirmarServicio';
+import Coordinadores from './pages/Coordinadores';
+import DashboardCoordinador from './pages/DashboardCoordinador';
+import Disponibilidad from './pages/Disponibilidad';
+import FichajeQR from './pages/FichajeQR';
+import HistorialMensajes from './pages/HistorialMensajes';
+import Home from './pages/Home';
 import Informes from './pages/Informes';
-import MiHorario from './pages/MiHorario';
-import Notificaciones from './pages/Notificaciones';
-import Orders from './pages/Orders';
-import Personal from './pages/Personal';
-import Settings from './pages/Settings';
-import Shifts from './pages/Shifts';
-import Staff from './pages/Staff';
+import Pedidos from './pages/Pedidos';
+import PerfilCamarero from './pages/PerfilCamarero';
+import PreferenciasNotificaciones from './pages/PreferenciasNotificaciones';
+import TableroEventos from './pages/TableroEventos';
+import TiempoReal from './pages/TiempoReal';
+import VistaMovil from './pages/VistaMovil';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "CalendarSync": CalendarSync,
+    "Altas": Altas,
+    "Asignacion": Asignacion,
+    "Camareros": Camareros,
     "Chat": Chat,
-    "CheckIn": CheckIn,
-    "ClientChatbot": ClientChatbot,
-    "Clients": Clients,
-    "Dashboard": Dashboard,
-    "Events": Events,
+    "Clientes": Clientes,
+    "Comunicacion": Comunicacion,
+    "ConfiguracionCuenta": ConfiguracionCuenta,
+    "ConfiguracionNotificaciones": ConfiguracionNotificaciones,
+    "ConfirmarServicio": ConfirmarServicio,
+    "Coordinadores": Coordinadores,
+    "DashboardCoordinador": DashboardCoordinador,
+    "Disponibilidad": Disponibilidad,
+    "FichajeQR": FichajeQR,
+    "HistorialMensajes": HistorialMensajes,
+    "Home": Home,
     "Informes": Informes,
-    "MiHorario": MiHorario,
-    "Notificaciones": Notificaciones,
-    "Orders": Orders,
-    "Personal": Personal,
-    "Settings": Settings,
-    "Shifts": Shifts,
-    "Staff": Staff,
+    "Pedidos": Pedidos,
+    "PerfilCamarero": PerfilCamarero,
+    "PreferenciasNotificaciones": PreferenciasNotificaciones,
+    "TableroEventos": TableroEventos,
+    "TiempoReal": TiempoReal,
+    "VistaMovil": VistaMovil,
 }
 
 export const pagesConfig = {
-    mainPage: "Dashboard",
+    mainPage: "Pedidos",
     Pages: PAGES,
     Layout: __Layout,
 };
