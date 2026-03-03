@@ -47,6 +47,8 @@ El stack tecnológico es moderno y bien elegido. El código es legible y sigue p
 | Documentación de entorno | 🔴 0/10 | ✅ 9/10 |
 | Funciones serverless | ✅ 9/10 | ✅ 9/10 |
 | Componentes React | ✅ 8/10 | ✅ 8/10 |
+| Manejo de errores frontend | 🔴 3/10 | ✅ 8/10 |
+| Build y configuración Vite | 🟡 6/10 | ✅ 8/10 |
 | RBAC / autorización | 🟡 6/10 | 🟡 6/10 |
 | Tests | 🔴 0/10 | 🔴 0/10 |
 | **Total** | **~4/10** | **~8/10** |
@@ -65,11 +67,12 @@ El stack tecnológico es moderno y bien elegido. El código es legible y sigue p
 | F06 | 🟠 Alta | `src/components/orders/OrderStaffManager.jsx` | Dos `alert()` (éxito y error de sync con Google Calendar) en lugar de `toast` | ✅ Corregido Fase 1 |
 | F07 | 🟠 Alta | `src/pages/CalendarSync.jsx` | Tres `alert()` (errores de sync/delete turno/evento) en lugar de `toast` | ✅ Corregido Fase 1 |
 | F08 | 🟡 Media | `functions/*.ts` | SDK de Base44 fijado a `@0.8.6` en funciones Deno, pero `^0.8.18` en frontend — versión desincronizada | 📋 Pendiente Fase 2 |
-| F09 | 🟡 Media | `src/pages/Dashboard.jsx` | Queries sin manejo de error explícito (sin `.catch()` ni try/catch) — fallos silenciosos | 📋 Pendiente Fase 2 |
+| F09 | 🟠 Alta | `src/pages/Dashboard.jsx` | Queries sin manejo de error explícito — el Promise.all fallaba silenciosamente sin notificar al usuario | ✅ Corregido Fase 1 |
 | F10 | 🟡 Media | Múltiples páginas | Varias páginas hacen `base44.entities.X.list(sort, limit)` sin paginación real — riesgo de carga masiva con muchos datos | 📋 Pendiente Fase 2 |
-| F11 | 🟡 Media | `vite.config.js` | `sourcemap` no configurado — en producción sin sourcemaps ocultos es difícil depurar errores | 📋 Pendiente Fase 3 |
-| F12 | 🟡 Media | `src/components/auth/` | RBAC implementado con `useAppRole` — bien estructurado pero sin tests de cobertura | 📋 Pendiente Fase 3 |
-| F13 | 🔴 Crítica | — | Sin ningún test unitario, de integración ni e2e — riesgo de regresiones | 📋 Pendiente Fase 3 |
+| F11 | 🟡 Media | `vite.config.js` | `sourcemap` no configurado — en producción sin sourcemaps ocultos es difícil depurar errores | ✅ Corregido Fase 1 |
+| F12 | 🟡 Media | `src/pages/Settings.jsx` | Línea de código muerto `await base44.auth.updateMe ? null : null; // no-op` sin ningún efecto | ✅ Corregido Fase 1 |
+| F13 | 🟡 Media | `src/components/auth/` | RBAC implementado con `useAppRole` — bien estructurado pero sin tests de cobertura | 📋 Pendiente Fase 3 |
+| F14 | 🔴 Crítica | — | Sin ningún test unitario, de integración ni e2e — riesgo de regresiones | 📋 Pendiente Fase 3 |
 
 ---
 
@@ -135,6 +138,50 @@ Se importó `toast` de `sonner` y se reemplazaron los dos `alert()` (éxito y er
 
 ### 7. `src/pages/CalendarSync.jsx` — `alert()` → `toast.error()`
 Se importó `toast` de `sonner` y se reemplazaron los tres `alert()` de error al sincronizar/eliminar eventos y turnos con Google Calendar.
+
+---
+
+### 8. `src/pages/Dashboard.jsx` — Manejo de errores en Promise.all
+**Antes:**
+```js
+Promise.all([...]).then(([...]) => {
+  setData({...});
+  setLoading(false);
+});
+```
+**Después:**
+```js
+Promise.all([...]).then(([...]) => {
+  setData({...});
+}).catch((err) => {
+  toast.error("Error al cargar el dashboard: " + (err?.message || "Error desconocido"));
+}).finally(() => {
+  setLoading(false);
+});
+```
+**Impacto:** Sin `.catch()`, cualquier error de red o API hacía que el spinner girara indefinidamente y el usuario no recibía ninguna notificación del problema. Con este fix el error se muestra como toast y el loading se resetea correctamente.
+
+---
+
+### 9. `src/pages/Settings.jsx` — Eliminación de código muerto
+**Antes:**
+```js
+await base44.auth.updateMe ? null : null; // no-op
+```
+**Después:** Línea eliminada.  
+**Impacto:** Código sin efecto que causaba confusión sobre la intención del desarrollador.
+
+---
+
+### 10. `vite.config.js` — Sourcemaps ocultos para producción
+**Antes:** Sin configuración de `build.sourcemap`.  
+**Después:**
+```js
+build: {
+  sourcemap: 'hidden',
+}
+```
+**Impacto:** Con `sourcemap: 'hidden'` los sourcemaps se generan pero no se referencian desde el bundle, lo que permite usar herramientas de monitorización (Sentry, etc.) para depurar errores en producción sin exponer el código fuente al navegador del usuario.
 
 ---
 
