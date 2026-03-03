@@ -4,9 +4,6 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  build: {
-    sourcemap: 'hidden',
-  },
   logLevel: 'error', // Suppress warnings, only show errors
   build: {
     sourcemap: 'hidden', // Generate hidden sourcemaps for production debugging without exposing source
