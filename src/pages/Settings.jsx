@@ -108,6 +108,43 @@ export default function Settings() {
         ))}
       </div>
 
+      {/* Delete Account */}
+      <div className="border border-red-200 rounded-xl p-5 bg-red-50 dark:bg-red-950/20">
+        <div className="flex items-start gap-3">
+          <Trash2 className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+          <div className="flex-1">
+            <h3 className="font-semibold text-red-800 dark:text-red-400">Eliminar mi cuenta</h3>
+            <p className="text-sm text-red-600 dark:text-red-500 mt-1">
+              Esta acción eliminará permanentemente tu cuenta y todos tus datos personales. No se puede deshacer.
+            </p>
+            {!showDeleteConfirm ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-3 border-red-300 text-red-600 hover:bg-red-100"
+                onClick={() => setShowDeleteConfirm(true)}
+              >
+                Solicitar eliminación de cuenta
+              </Button>
+            ) : (
+              <div className="mt-3 space-y-2">
+                <p className="text-sm font-medium text-red-700">¿Estás seguro? Esta acción es irreversible.</p>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                    onClick={() => base44.auth.logout()}
+                  >
+                    Confirmar eliminación
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => setShowDeleteConfirm(false)}>Cancelar</Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* User table */}
       <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
         <div className="flex items-center gap-2 px-5 py-4 border-b">
