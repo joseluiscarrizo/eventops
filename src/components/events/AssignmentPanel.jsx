@@ -66,11 +66,12 @@ export default function AssignmentPanel({ event, onClose }) {
   };
 
   const handleStatusChange = async (assignmentId, status) => {
+    // Optimistic update
+    setAssignments(prev => prev.map(a => a.id === assignmentId ? { ...a, status } : a));
     const update = { status };
     if (status === "checked_in") update.check_in_time = new Date().toISOString();
     if (status === "checked_out") update.check_out_time = new Date().toISOString();
     await base44.entities.Assignment.update(assignmentId, update);
-    load();
   };
 
   const handleDelete = async (id) => {

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
 import { startOfToday, format } from "date-fns";
+import PullToRefresh from "@/components/PullToRefresh";
 
 import StatsCards from "@/components/dashboard/StatsCards";
 import OrdersChart from "@/components/dashboard/OrdersChart";
