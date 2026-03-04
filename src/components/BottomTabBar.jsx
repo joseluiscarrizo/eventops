@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { LayoutDashboard, Calendar, ClipboardList, UserCog, User } from "lucide-react";
 
@@ -11,6 +11,8 @@ const TABS = [
 ];
 
 export default function BottomTabBar({ currentPageName }) {
+  const navigate = useNavigate();
+
   return (
     <nav
       className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex"
@@ -19,9 +21,9 @@ export default function BottomTabBar({ currentPageName }) {
       {TABS.map(({ label, page, icon: Icon }) => {
         const active = currentPageName === page;
         return (
-          <Link
+          <button
             key={page}
-            to={createPageUrl(page)}
+            onClick={() => navigate(createPageUrl(page), { replace: active })}
             className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 text-[10px] font-medium select-none transition-colors ${
               active
                 ? "text-indigo-600 dark:text-indigo-400"
@@ -30,7 +32,7 @@ export default function BottomTabBar({ currentPageName }) {
           >
             <Icon className={`w-5 h-5 ${active ? "stroke-[2.5px]" : ""}`} />
             {label}
-          </Link>
+          </button>
         );
       })}
     </nav>
