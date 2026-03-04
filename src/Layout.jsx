@@ -106,11 +106,15 @@ function SidebarContent({ currentPageName, onClose }) {
   );
 }
 
+const BOTTOM_TAB_PAGES = ["Dashboard", "Events", "Orders", "Personal", "MiHorario"];
+
 function LayoutInner({ children, currentPageName }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+  const isBottomTab = BOTTOM_TAB_PAGES.includes(currentPageName);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-background flex">
       <style>{`
         :root { --brand: #6366f1; --brand-dark: #4f46e5; }
       `}</style>
@@ -120,7 +124,9 @@ function LayoutInner({ children, currentPageName }) {
         transform transition-transform duration-200
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0 lg:static lg:flex
-      `}>
+      `}
+        style={{ paddingTop: "env(safe-area-inset-top)" }}
+      >
         <SidebarContent currentPageName={currentPageName} onClose={() => setSidebarOpen(false)} />
       </aside>
 
@@ -129,15 +135,43 @@ function LayoutInner({ children, currentPageName }) {
       )}
 
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="lg:hidden h-16 bg-white border-b flex items-center px-4 gap-4">
-          <button onClick={() => setSidebarOpen(true)}>
-            <Menu className="w-5 h-5 text-gray-600" />
-          </button>
-          <span className="font-semibold text-gray-900">EventOps</span>
+        {/* Mobile header */}
+        <header
+          className="lg:hidden h-14 bg-background border-b border-border flex items-center px-4 gap-3"
+          style={{ paddingTop: "env(safe-area-inset-top)", height: "calc(3.5rem + env(safe-area-inset-top))" }}
+        >
+          {!isBottomTab ? (
+            <button onClick={() => window.history.back()} className="p-1 -ml-1 text-gray-600 dark:text-gray-300">
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+          ) : (
+            <button onClick={() => setSidebarOpen(true)} className="p-1 -ml-1">
+              <Menu className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+            </button>
+          )}
+          <span className="font-semibold text-gray-900 dark:text-gray-100">EventOps</span>
           <div className="ml-auto"><NotificationBell /></div>
         </header>
-        <main className="flex-1 p-4 lg:p-8">{children}</main>
+
+        <main
+          className="flex-1 p-4 lg:p-8 overflow-y-auto"
+          style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom) + 4rem)" }}
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -16 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
+        </main>
       </div>
+
+      <BottomTabBar currentPageName={currentPageName} />
     </div>
   );
 }
