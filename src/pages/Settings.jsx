@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useAppRole, ROLE_LABELS, CAN } from "@/components/auth/useAppRole";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ShieldCheck, Users, Save, AlertTriangle } from "lucide-react";
+import { ShieldCheck, Users, Save, AlertTriangle, Trash2 } from "lucide-react";
 
 const ROLE_COLORS = {
   admin: "bg-red-100 text-red-800",
