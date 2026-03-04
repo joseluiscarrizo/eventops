@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Calendar,
   Users,
@@ -18,9 +19,11 @@ import {
   User,
   MessageSquare,
   Bot,
-  Bell
+  Bell,
+  ChevronLeft
 } from "lucide-react";
 import NotificationBell from "@/components/notifications/NotificationBell";
+import BottomTabBar from "@/components/BottomTabBar";
 import { base44 } from "@/api/base44Client";
 import { RoleProvider, useAppRole, CAN } from "@/components/auth/useAppRole";
 
