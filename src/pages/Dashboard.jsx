@@ -18,9 +18,8 @@ export default function Dashboard() {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const today = format(startOfToday(), "yyyy-MM-dd");
-    Promise.all([
+  const fetchData = useCallback(() => {
+    return Promise.all([
       base44.entities.Event.list("-date_start", 50),
       base44.entities.Order.list("-created_date", 100),
       base44.entities.Personal.list("-created_date", 200),
@@ -37,6 +36,8 @@ export default function Dashboard() {
     });
   }, []);
 
+  useEffect(() => { fetchData(); }, [fetchData]);
+
   const today = format(startOfToday(), "yyyy-MM-dd");
 
   const stats = {
@@ -49,25 +50,27 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500 mt-1 text-sm">Resumen general de operaciones en tiempo real</p>
+    <PullToRefresh onRefresh={fetchData}>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-gray-500 mt-1 text-sm">Resumen general de operaciones en tiempo real</p>
+        </div>
+
+        <StatsCards data={stats} loading={loading} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ShiftsOccupancy shifts={data.shifts} assignments={data.shiftAssignments} loading={loading} />
+          <OrdersChart orders={data.orders} loading={loading} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <UpcomingEvents events={data.events} loading={loading} />
+          <AbsencesSummary absences={data.absences} loading={loading} />
+        </div>
+
+        <RecentNotifications notifications={data.notifications} loading={loading} />
       </div>
-
-      <StatsCards data={stats} loading={loading} />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ShiftsOccupancy shifts={data.shifts} assignments={data.shiftAssignments} loading={loading} />
-        <OrdersChart orders={data.orders} loading={loading} />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <UpcomingEvents events={data.events} loading={loading} />
-        <AbsencesSummary absences={data.absences} loading={loading} />
-      </div>
-
-      <RecentNotifications notifications={data.notifications} loading={loading} />
-    </div>
+    </PullToRefresh>
   );
 }

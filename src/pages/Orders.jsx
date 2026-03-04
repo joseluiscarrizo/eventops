@@ -114,8 +114,9 @@ export default function Orders() {
 
   const handleStatusChange = async (order, status) => {
     const oldStatus = order.status;
-    await base44.entities.Order.update(order.id, { status });
+    // Optimistic update first
     setOrders(prev => prev.map(o => o.id === order.id ? { ...o, status } : o));
+    await base44.entities.Order.update(order.id, { status });
     base44.functions.invoke("notifyOrderChange", {
       type: "status_change",
       order_id: order.id,
