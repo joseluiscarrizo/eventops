@@ -38,6 +38,7 @@ export default function Settings() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState({});
   const [changes, setChanges] = useState({});
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (!CAN.manageUsers(myRole)) return;
